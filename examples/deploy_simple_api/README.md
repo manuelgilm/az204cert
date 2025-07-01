@@ -7,3 +7,6 @@ The `create_resources.sh` script automates the creation of the resource group, s
 Ensure that the **Setup Command** field is configured accurately. An incorrect setup command may prevent the application from starting as expected.
 ![alt text](image.png)
 
+## Results
+In the browser we can see the following:
+![alt text](image-1.png)

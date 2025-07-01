@@ -1,0 +1,28 @@
+name: Simple Container API Deployment 
+on: 
+  push:
+    branches:
+      - master
+    paths:
+      - examples/deploy_container_api/trigger.txt
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read #This is required for actions/checkout
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v4
+        with:
+          context: ./examples/deploy_container_api/
+          file: ./examples/deploy_container_api/Dockerfile
+          push: true
+          tags: simpleapigs:latest

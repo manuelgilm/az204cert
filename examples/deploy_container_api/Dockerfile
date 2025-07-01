@@ -4,9 +4,9 @@ FROM python:3.12-slim
 RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends gcc && \
 	pip install --upgrade pip && \
 	apt-get clean && rm -rf /var/lib/apt/lists/*
-
-WORKDIR /simpleapi
+RUN mkdir /simpleapi
 COPY simpleapi ./simpleapi
+WORKDIR /simpleapi
 RUN pip install poetry  
 RUN poetry install  
 EXPOSE 8000

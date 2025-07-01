@@ -8,6 +8,8 @@ on:
   push:
     branches:
       - master
+    paths:
+      - examples/deploy_simple_api/tigger.txt
   workflow_dispatch:
 
 jobs:

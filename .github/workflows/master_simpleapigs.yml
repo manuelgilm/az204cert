@@ -9,7 +9,7 @@ on:
     branches:
       - master
     paths:
-      - examples/deploy_simple_api/tigger.txt
+      - examples/deploy_simple_api/trigger.txt
   workflow_dispatch:
 
 jobs:

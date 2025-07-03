@@ -4,7 +4,7 @@ on:
     branches:
       - master
     paths:
-      - examples/deploy_simple_api/trigger.txt
+      - examples/deployment_slots/trigger.txt
   workflow_dispatch:
 
 jobs:

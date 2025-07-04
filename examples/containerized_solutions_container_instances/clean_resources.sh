@@ -1,0 +1,1 @@
+az group delete --name "containerized-solutions" --yes --no-wait

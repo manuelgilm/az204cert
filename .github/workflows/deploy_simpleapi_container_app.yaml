@@ -9,6 +9,7 @@ on:
 env:
   RESOURCE_GROUP_NAME: "simpleapi-container-app-rg"
   CONTAINER_APP_NAME: "simpleapi-container-app"
+  CONTAINER_APP_ENV_NAME: "simpleapi-container-app-env"
   ACR_NAME: "simpleapiacr"
   LOCATION: "brazilsouth"
 
@@ -54,4 +55,19 @@ jobs:
               az acr create --resource-group ${{ env.RESOURCE_GROUP_NAME }} --name ${{ env.ACR_NAME }} --sku Basic
             else
               echo "Azure Container Registry ${{ env.ACR_NAME }} already exists."
+            fi
+      
+      # container app creation
+      - name: Create Azure Container App Environment
+        uses: azure/cli@v2 
+        with:
+          azcliversion: latest 
+          inlineScript: |
+            # verify if the container app environment already exists
+            existing_env=$(az containerapp env list --resource-group ${{ env.RESOURCE_GROUP_NAME }} --query "[?name=='${{ env.CONTAINER_APP_ENV_NAME }}'].name" -o tsv)
+            if [ -z "$existing_env" ]; then
+              echo "Creating Azure Container App Environment"
+              az containerapp env create --name ${{ env.CONTAINER_APP_ENV_NAME }} --resource-group ${{ env.RESOURCE_GROUP_NAME }} --location ${{ env.LOCATION }}
+            else
+              echo "Azure Container App Environment already exists."
             fi

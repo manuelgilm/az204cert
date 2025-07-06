@@ -78,6 +78,6 @@ jobs:
         run: |
           echo "Building and pushing container image to ACR"
           az acr build --registry ${{ env.ACR_NAME }} --image ${{ env.IMAGE_NAME }} --file Dockerfile .
-        working-directory: $GITHUB_WORKSPACE/examples/deploy_simpleapi_container_app/
+        working-directory: ./examples/deploy_simpleapi_container_app/
             
             

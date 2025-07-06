@@ -48,7 +48,7 @@ jobs:
           azcliversion: latest 
           inlineScript: |
             # verify if the container registry already exists
-            existing_acr=$(az acr show --name ${{ env.ACR_NAME }} --resource-group ${{ env.RESOURCE_GROUP_NAME }} --query "name" -o tsv 2>/dev/null)
+            existing_acr=$(az acr list --resource-group ${{ env.RESOURCE_GROUP_NAME }} --query "[?name=='${{ env.ACR_NAME }}'].name" -o tsv)
             if [ -z "$existing_acr" ]; then
               echo "Creating Azure Container Registry: ${{ env.ACR_NAME }}"
               az acr create --resource-group ${{ env.RESOURCE_GROUP_NAME }} --name ${{ env.ACR_NAME }} --sku Basic

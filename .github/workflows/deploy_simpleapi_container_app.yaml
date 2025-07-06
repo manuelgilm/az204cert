@@ -6,6 +6,10 @@ on:
     paths:
       - examples/deploy_simpleapi_container_app/trigger.txt
   workflow_dispatch:
+env:
+  RESOURCE_GROUP_NAME: "simpleapi-container-app-rg"
+  CONTAINER_APP_NAME: "simpleapi-container-app"
+  LOCATION: "brazilsouth"
 
 jobs: 
   create_resources:
@@ -22,3 +26,17 @@ jobs:
           azcliversion: latest 
           inlineScript: |
             az group list --output table
+
+      - name: Create Resource Group 
+        uses: azure/cli@v2 
+        with:
+          azcliversion: latest 
+          inlineScript: |
+            # verify if the resource group already exists
+            existing_rg=$(az group exists --name ${{ env.RESOURCE_GROUP_NAME }})
+            if [ "$existing_rg" = "false" ]; then
+              echo "Creating resource group: ${{ env.RESOURCE_GROUP_NAME }}"
+              az group create --name ${{ env.RESOURCE_GROUP_NAME }} --location ${{ env.LOCATION }}
+            else
+              echo "Resource group ${{ env.RESOURCE_GROUP_NAME }} already exists."
+            fi

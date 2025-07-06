@@ -74,7 +74,7 @@ jobs:
               echo "Azure Container App Environment already exists."
             fi
       - name: Build and Push Container Image
-        uses: azure@cli@v2
+        uses: azure/cli@v2
         with:
           azcliversion: latest
           inlineScript: |

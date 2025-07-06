@@ -73,13 +73,11 @@ jobs:
             else
               echo "Azure Container App Environment already exists."
             fi
+      
       - name: Build and Push Container Image
-        uses: azure/cli@v2
-        with:
-          azcliversion: latest
-          inlineScript: |
-            echo "Building and pushing container image to ACR"
-            az acr build --registry ${{ env.ACR_NAME }} --image ${{ env.IMAGE_NAME }} --file Dockerfile .
-          working-directory: ./examples/deploy_simpleapi_container_app/
+        run: |
+          echo "Building and pushing container image to ACR"
+          az acr build --registry ${{ env.ACR_NAME }} --image ${{ env.IMAGE_NAME }} --file Dockerfile .
+        working-directory: ./examples/deploy_simpleapi_container_app/
             
             

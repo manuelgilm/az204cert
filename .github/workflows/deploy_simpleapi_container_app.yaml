@@ -95,7 +95,8 @@ jobs:
               az containerapp create --name ${{ env.CONTAINER_APP_NAME }} \
                 --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
                 --environment ${{ env.CONTAINER_APP_ENV_NAME }} \
-                --image ${{ env.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }} \
+                --registry-server image ${{ env.ACR_NAME }}.azurecr.io \
+                --image ${{ env.IMAGE_NAME }} \
                 --target-port 8000 \
                 --ingress external \
                 --cpu 0.5 \

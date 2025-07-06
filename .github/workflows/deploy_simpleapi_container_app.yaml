@@ -9,6 +9,7 @@ on:
 env:
   RESOURCE_GROUP_NAME: "simpleapi-container-app-rg"
   CONTAINER_APP_NAME: "simpleapi-container-app"
+  ACR_NAME: "simpleapiacr"
   LOCATION: "brazilsouth"
 
 jobs: 
@@ -39,4 +40,18 @@ jobs:
               az group create --name ${{ env.RESOURCE_GROUP_NAME }} --location ${{ env.LOCATION }}
             else
               echo "Resource group ${{ env.RESOURCE_GROUP_NAME }} already exists."
+            fi
+
+      - name: Create Azure Container Registry
+        uses: azure/cli@v2 
+        with: 
+          azcliversion: latest 
+          inlineScript: |
+            # verify if the container registry already exists
+            existing_acr=$(az acr show --name ${{ env.ACR_NAME }} --resource-group ${{ env.RESOURCE_GROUP_NAME }} --query "name" -o tsv 2>/dev/null)
+            if [ -z "$existing_acr" ]; then
+              echo "Creating Azure Container Registry: ${{ env.ACR_NAME }}"
+              az acr create --resource-group ${{ env.RESOURCE_GROUP_NAME }} --name ${{ env.ACR_NAME }} --sku Basic
+            else
+              echo "Azure Container Registry ${{ env.ACR_NAME }} already exists."
             fi

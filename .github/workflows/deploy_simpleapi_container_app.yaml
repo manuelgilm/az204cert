@@ -92,8 +92,7 @@ jobs:
             existing_app=$(az containerapp list --resource-group ${{ env.RESOURCE_GROUP_NAME }} --query "[?name=='${{ env.CONTAINER_APP_NAME }}'].name" -o tsv)
             # if [ -z "$existing_app" ]; then
             echo "Creating Azure Container App"
-            az login
-            az acr login --name ${{ env.ACR_NAME }}
+            az acr login --name ${{ env.ACR_NAME }} --expose-token
             az containerapp create --name ${{ env.CONTAINER_APP_NAME }} \
               --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
               --environment ${{ env.CONTAINER_APP_ENV_NAME }} \

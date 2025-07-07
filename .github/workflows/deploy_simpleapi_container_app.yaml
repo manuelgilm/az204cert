@@ -82,8 +82,8 @@ jobs:
       #     echo "Building and pushing container image to ACR"
       #     az acr build --registry ${{ env.ACR_NAME }} --image ${{ env.IMAGE_NAME }} --file Dockerfile .
       #   working-directory: ./examples/deploy_simpleapi_container_app/
-      - name: Login to Azure Container Registry
-        run: |
+      # - name: Login to Azure Container Registry
+      #   run: |
           
           
       - name: Create Azure Container App 
@@ -94,13 +94,15 @@ jobs:
             # verify if the container app already exists
             existing_app=$(az containerapp list --resource-group ${{ env.RESOURCE_GROUP_NAME }} --query "[?name=='${{ env.CONTAINER_APP_NAME }}'].name" -o tsv)
             # if [ -z "$existing_app" ]; then
-            echo "Login to Azure Container Registry"
-            az acr login --name ${{ env.ACR_NAME }} --username ${{ secrets.AZ_SP_CLIENT_ID }} --password ${{ secrets.AZ_SP_CLIENT_SECRET }}
+
+            
             echo "Creating Azure Container App"
             az containerapp create --name ${{ env.CONTAINER_APP_NAME }} \
               --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
               --environment ${{ env.CONTAINER_APP_ENV_NAME }} \
               --registry-server ${{ env.ACR_NAME }}.azurecr.io \
+              --registry-username ${{ secrets.AZ_SP_CLIENT_ID }} \
+              --registry-password ${{ secrets.AZ_SP_CLIENT_SECRET }} \
               --image ${{ env.IMAGE_NAME }} \
               --target-port 8000 \
               --ingress external \

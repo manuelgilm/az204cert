@@ -82,7 +82,15 @@ jobs:
       #     echo "Building and pushing container image to ACR"
       #     az acr build --registry ${{ env.ACR_NAME }} --image ${{ env.IMAGE_NAME }} --file Dockerfile .
       #   working-directory: ./examples/deploy_simpleapi_container_app/
-
+      - name: Login to Azure Container Registry
+        run: |
+          credentials=${{ secrets.AZURE_CREDENTIALS }}
+          echo "Extracting ACR credentials from Azure credentials"
+          sp_client_secret=$(echo $credentials | jq -r '.clientSecret')
+          sp_client_id=$(echo $credentials | jq -r '.clientId')
+          echo "Logging in to Azure Container Registry"
+          az acr login --name ${{ env.ACR_NAME }} --expose-token --service-principal --username $sp_client_id --password $sp_client_secret
+          
       - name: Create Azure Container App 
         uses: azure/cli@v2
         with:
@@ -92,7 +100,6 @@ jobs:
             existing_app=$(az containerapp list --resource-group ${{ env.RESOURCE_GROUP_NAME }} --query "[?name=='${{ env.CONTAINER_APP_NAME }}'].name" -o tsv)
             # if [ -z "$existing_app" ]; then
             echo "Creating Azure Container App"
-            az acr login --name ${{ env.ACR_NAME }} --expose-token
             az containerapp create --name ${{ env.CONTAINER_APP_NAME }} \
               --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
               --environment ${{ env.CONTAINER_APP_ENV_NAME }} \

@@ -102,7 +102,7 @@ jobs:
               --environment ${{ env.CONTAINER_APP_ENV_NAME }} \
               --registry-server ${{ env.ACR_NAME }}.azurecr.io \
               --registry-username ${{ env.ACR_NAME  }} \
-              --registry-password ${{ env.SIMPLEAPIACR_PASSWORD }} \
+              --registry-password ${{ secrets.SIMPLEAPIACR_PASSWORD }} \
               --image ${{ env.IMAGE_NAME }} \
               --target-port 8000 \
               --ingress external \

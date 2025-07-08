@@ -16,77 +16,77 @@ env:
 
 
 jobs: 
-  # create_resources:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout repository
-  #       uses: actions/checkout@v3
+  create_resources:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-  #     - name: Azure Login
-  #       uses: azure/login@v2
-  #       with:
-  #         creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-  #     - name: List Resource Groups 
-  #       uses: azure/cli@v2 
-  #       with:
-  #         azcliversion: latest 
-  #         inlineScript: |
-  #           az group list --output table
+      - name: List Resource Groups 
+        uses: azure/cli@v2 
+        with:
+          azcliversion: latest 
+          inlineScript: |
+            az group list --output table
 
-  #     - name: Create Resource Group 
-  #       uses: azure/cli@v2 
-  #       with:
-  #         azcliversion: latest 
-  #         inlineScript: |
-  #           # verify if the resource group already exists
-  #           existing_rg=$(az group exists --name ${{ env.RESOURCE_GROUP_NAME }})
-  #           if [ "$existing_rg" = "false" ]; then
-  #             echo "Creating resource group: ${{ env.RESOURCE_GROUP_NAME }}"
-  #             az group create --name ${{ env.RESOURCE_GROUP_NAME }} --location ${{ env.LOCATION }}
-  #           else
-  #             echo "Resource group ${{ env.RESOURCE_GROUP_NAME }} already exists."
-  #           fi
+      - name: Create Resource Group 
+        uses: azure/cli@v2 
+        with:
+          azcliversion: latest 
+          inlineScript: |
+            # verify if the resource group already exists
+            existing_rg=$(az group exists --name ${{ env.RESOURCE_GROUP_NAME }})
+            if [ "$existing_rg" = "false" ]; then
+              echo "Creating resource group: ${{ env.RESOURCE_GROUP_NAME }}"
+              az group create --name ${{ env.RESOURCE_GROUP_NAME }} --location ${{ env.LOCATION }}
+            else
+              echo "Resource group ${{ env.RESOURCE_GROUP_NAME }} already exists."
+            fi
 
-  #     - name: Create Azure Container Registry
-  #       uses: azure/cli@v2 
-  #       with: 
-  #         azcliversion: latest 
-  #         inlineScript: |
-  #           # verify if the container registry already exists
-  #           existing_acr=$(az acr list --resource-group ${{ env.RESOURCE_GROUP_NAME }} --query "[?name=='${{ env.ACR_NAME }}'].name" -o tsv)
-  #           if [ -z "$existing_acr" ]; then
-  #             echo "Creating Azure Container Registry: ${{ env.ACR_NAME }}"
-  #             az acr create --resource-group ${{ env.RESOURCE_GROUP_NAME }} --name ${{ env.ACR_NAME }} --sku Basic
-  #           else
-  #             echo "Azure Container Registry ${{ env.ACR_NAME }} already exists."
-  #           fi
+      - name: Create Azure Container Registry
+        uses: azure/cli@v2 
+        with: 
+          azcliversion: latest 
+          inlineScript: |
+            # verify if the container registry already exists
+            existing_acr=$(az acr list --resource-group ${{ env.RESOURCE_GROUP_NAME }} --query "[?name=='${{ env.ACR_NAME }}'].name" -o tsv)
+            if [ -z "$existing_acr" ]; then
+              echo "Creating Azure Container Registry: ${{ env.ACR_NAME }}"
+              az acr create --resource-group ${{ env.RESOURCE_GROUP_NAME }} --name ${{ env.ACR_NAME }} --sku Basic
+            else
+              echo "Azure Container Registry ${{ env.ACR_NAME }} already exists."
+            fi
 
-  #           # Enable admin user for ACR
-  #           echo "Enabling admin user for Azure Container Registry: ${{ env.ACR_NAME }}"
-  #           # This is necessary for the container app to pull images from ACR
-  #           az acr update --name ${{ env.ACR_NAME  }} --admin-enabled true
+            # Enable admin user for ACR
+            echo "Enabling admin user for Azure Container Registry: ${{ env.ACR_NAME }}"
+            # This is necessary for the container app to pull images from ACR
+            az acr update --name ${{ env.ACR_NAME  }} --admin-enabled true
       
-  #     # container app creation
-  #     - name: Create Azure Container App Environment
-  #       uses: azure/cli@v2 
-  #       with:
-  #         azcliversion: latest 
-  #         inlineScript: |
-  #           # verify if the container app environment already exists
-  #           existing_env=$(az containerapp env list --resource-group ${{ env.RESOURCE_GROUP_NAME }} --query "[?name=='${{ env.CONTAINER_APP_ENV_NAME }}'].name" -o tsv)
-  #           if [ -z "$existing_env" ]; then
-  #             echo "Creating Azure Container App Environment"
-  #             az containerapp env create --name ${{ env.CONTAINER_APP_ENV_NAME }} --resource-group ${{ env.RESOURCE_GROUP_NAME }} --location ${{ env.LOCATION }}
-  #           else
-  #             echo "Azure Container App Environment already exists."
-  #           fi
+      # container app creation
+      - name: Create Azure Container App Environment
+        uses: azure/cli@v2 
+        with:
+          azcliversion: latest 
+          inlineScript: |
+            # verify if the container app environment already exists
+            existing_env=$(az containerapp env list --resource-group ${{ env.RESOURCE_GROUP_NAME }} --query "[?name=='${{ env.CONTAINER_APP_ENV_NAME }}'].name" -o tsv)
+            if [ -z "$existing_env" ]; then
+              echo "Creating Azure Container App Environment"
+              az containerapp env create --name ${{ env.CONTAINER_APP_ENV_NAME }} --resource-group ${{ env.RESOURCE_GROUP_NAME }} --location ${{ env.LOCATION }}
+            else
+              echo "Azure Container App Environment already exists."
+            fi
       
-      # - name: Build and Push Container Image
-      #   run: |
-      #     echo "Building and pushing container image to ACR"
-      #     az acr build --registry ${{ env.ACR_NAME }} --image ${{ env.IMAGE_NAME }} --file Dockerfile .
-      #   working-directory: ./examples/deploy_simpleapi_container_app/
+      - name: Build and Push Container Image
+        run: |
+          echo "Building and pushing container image to ACR"
+          az acr build --registry ${{ env.ACR_NAME }} --image ${{ env.IMAGE_NAME }} --file Dockerfile .
+        working-directory: ./examples/deploy_simpleapi_container_app/
 
       # - name: Create Azure Container App 
       #   uses: azure/cli@v2
@@ -113,25 +113,25 @@ jobs:
       #       # fi
 
 
-  clean_resources:
-    runs-on: ubuntu-latest
-    # needs: create_resources
-    if: github.event_name == 'workflow_dispatch' || github.event_name == 'push'
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+  # clean_resources:
+  #   runs-on: ubuntu-latest
+  #   # needs: create_resources
+  #   if: github.event_name == 'workflow_dispatch' || github.event_name == 'push'
+  #   steps:
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v3
 
-      - name: Azure Login
-        uses: azure/login@v2
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
+  #     - name: Azure Login
+  #       uses: azure/login@v2
+  #       with:
+  #         creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: Delete Resource Group
-        uses: azure/cli@v2 
-        with:
-          azcliversion: latest 
-          inlineScript: |
-            echo "Deleting resource group ${{ env.RESOURCE_GROUP_NAME }}"
-            az group delete --name ${{ env.RESOURCE_GROUP_NAME }} --yes --no-wait
+  #     - name: Delete Resource Group
+  #       uses: azure/cli@v2 
+  #       with:
+  #         azcliversion: latest 
+  #         inlineScript: |
+  #           echo "Deleting resource group ${{ env.RESOURCE_GROUP_NAME }}"
+  #           az group delete --name ${{ env.RESOURCE_GROUP_NAME }} --yes --no-wait
             
             

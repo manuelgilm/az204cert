@@ -85,7 +85,7 @@ jobs:
       - name: Build and Push Container Image
         run: |
           echo "Building and pushing container image to ACR"
-          az acr build --registry ${{ env.ACR_NAME }} --image ${{ env.IMAGE_NAME }} --file Dockerfile .
+          az acr build --registry ${{ env.ACR_NAME }} --image ${{ env.IMAGE_NAME }} --file Dockerfile . --auth-mode None
         working-directory: ./examples/deploy_simpleapi_container_app/
 
       - name: Create Azure Container App 

@@ -96,15 +96,13 @@ jobs:
             # verify if the container app already exists
             existing_app=$(az containerapp list --resource-group ${{ env.RESOURCE_GROUP_NAME }} --query "[?name=='${{ env.CONTAINER_APP_NAME }}'].name" -o tsv)
             # if [ -z "$existing_app" ]; then
-
-            access_token=$(az acr login --name ${{ env.ACR_NAME }} --expose-token --query accessToken -o tsv)
             echo "Creating Azure Container App"
             az containerapp create --name ${{ env.CONTAINER_APP_NAME }} \
               --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
               --environment ${{ env.CONTAINER_APP_ENV_NAME }} \
               --registry-server ${{ env.ACR_NAME }}.azurecr.io \
-              --registry-username 00000000-0000-0000-0000-000000000000 \
-              --registry-password $access_token \
+              --registry-username ${{ env.ACR_NAME  }} \
+              --registry-password ${{ env.SIMPLEAPIACR_PASSWORD }} \
               --image ${{ env.IMAGE_NAME }} \
               --target-port 8000 \
               --ingress external \

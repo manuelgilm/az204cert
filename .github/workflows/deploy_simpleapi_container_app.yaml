@@ -88,29 +88,29 @@ jobs:
           az acr build --registry ${{ env.ACR_NAME }} --image ${{ env.IMAGE_NAME }} --file Dockerfile .
         working-directory: ./examples/deploy_simpleapi_container_app/
 
-      # - name: Create Azure Container App 
-      #   uses: azure/cli@v2
-      #   with:
-      #     azcliversion: latest 
-      #     inlineScript: |
-      #       # verify if the container app already exists
-      #       existing_app=$(az containerapp list --resource-group ${{ env.RESOURCE_GROUP_NAME }} --query "[?name=='${{ env.CONTAINER_APP_NAME }}'].name" -o tsv)
-      #       # if [ -z "$existing_app" ]; then
-      #       echo "Creating Azure Container App"
-      #       az containerapp create --name ${{ env.CONTAINER_APP_NAME }} \
-      #         --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
-      #         --environment ${{ env.CONTAINER_APP_ENV_NAME }} \
-      #         --registry-server ${{ env.ACR_NAME }}.azurecr.io \
-      #         --registry-username ${{ env.ACR_NAME  }} \
-      #         --registry-password ${{ secrets.SIMPLEAPIACR_PASSWORD }} \
-      #         --image ${{ env.IMAGE_NAME }} \
-      #         --target-port 8000 \
-      #         --ingress external \
-      #         --cpu 0.5 \
-      #         --memory 1.0Gi
-      #       # else
-      #       #   echo "Azure Container App ${{ env.CONTAINER_APP_NAME }} already exists."
-      #       # fi
+      - name: Create Azure Container App 
+        uses: azure/cli@v2
+        with:
+          azcliversion: latest 
+          inlineScript: |
+            # verify if the container app already exists
+            existing_app=$(az containerapp list --resource-group ${{ env.RESOURCE_GROUP_NAME }} --query "[?name=='${{ env.CONTAINER_APP_NAME }}'].name" -o tsv)
+            # if [ -z "$existing_app" ]; then
+            echo "Creating Azure Container App"
+            az containerapp create --name ${{ env.CONTAINER_APP_NAME }} \
+              --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
+              --environment ${{ env.CONTAINER_APP_ENV_NAME }} \
+              --registry-server ${{ env.ACR_NAME }}.azurecr.io \
+              --registry-username ${{ env.ACR_NAME  }} \
+              --registry-password ${{ secrets.SIMPLEAPIACR_PASSWORD }} \
+              --image ${{ env.IMAGE_NAME }} \
+              --target-port 8000 \
+              --ingress external \
+              --cpu 0.5 \
+              --memory 1.0Gi
+            # else
+            #   echo "Azure Container App ${{ env.CONTAINER_APP_NAME }} already exists."
+            # fi
 
 
   # clean_resources:

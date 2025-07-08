@@ -61,6 +61,11 @@ jobs:
             else
               echo "Azure Container Registry ${{ env.ACR_NAME }} already exists."
             fi
+
+            # Enable admin user for ACR
+            echo "Enabling admin user for Azure Container Registry: ${{ env.ACR_NAME }}"
+            # This is necessary for the container app to pull images from ACR
+            az acr update --name ${{ env.ACR_NAME  }} --admin-enabled true
       
       # container app creation
       - name: Create Azure Container App Environment

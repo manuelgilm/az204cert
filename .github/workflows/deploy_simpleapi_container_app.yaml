@@ -101,9 +101,9 @@ jobs:
               --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
               --environment ${{ env.CONTAINER_APP_ENV_NAME }} \
               --registry-server ${{ env.ACR_NAME }}.azurecr.io \
-              --registry-username ${{ env.ACR_NAME  }} \
-              --registry-password ${{ secrets.SIMPLEAPIACR_PASSWORD }} \
-              --system-assigned true \
+              # --registry-username ${{ env.ACR_NAME  }} \
+              # --registry-password ${{ secrets.SIMPLEAPIACR_PASSWORD }} \
+              --registry-identity system  \
               --image ${{ env.IMAGE_NAME }} \
               --target-port 8000 \
               --ingress external \

@@ -103,7 +103,7 @@ jobs:
               --registry-server ${{ env.ACR_NAME }}.azurecr.io \
               # --registry-username ${{ env.ACR_NAME  }} \
               # --registry-password ${{ secrets.SIMPLEAPIACR_PASSWORD }} \
-              --registry-identity system  \
+              --registry-identity 'system'  \
               --image ${{ env.IMAGE_NAME }} \
               --target-port 8000 \
               --ingress external \

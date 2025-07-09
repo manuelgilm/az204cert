@@ -85,7 +85,7 @@ jobs:
       - name: Build and Push Container Image
         run: |
           echo "Building and pushing container image to ACR"
-          az acr build --registry ${{ env.ACR_NAME }} --image ${{ env.IMAGE_NAME }} --file Dockerfile . --auth-mode None
+          az acr build --registry ${{ env.ACR_NAME }} --image ${{ env.IMAGE_NAME }} --file Dockerfile . --auth-mode Default
         working-directory: ./examples/deploy_simpleapi_container_app/
 
       - name: Create Azure Container App 
@@ -103,6 +103,7 @@ jobs:
               --registry-server ${{ env.ACR_NAME }}.azurecr.io \
               --registry-username ${{ env.ACR_NAME  }} \
               --registry-password ${{ secrets.SIMPLEAPIACR_PASSWORD }} \
+              --source-acr-auth-id ${{ secrets.SOURCE_ACR_AUTH_ID }} \
               --image ${{ env.IMAGE_NAME }} \
               --target-port 8000 \
               --ingress external \

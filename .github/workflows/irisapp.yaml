@@ -8,10 +8,9 @@ on:
   workflow_dispatch:
 env:
   RESOURCE_GROUP_NAME: "irisapp-rg"
-  STORAGE_ACCOUNT_NAME: "irisappstorage"
-  STORAGE_CONTAINER_NAME: "irisapp-container"
-  COSMOS_DB_ACCOUNT_NAME: "irisappcosmosdb"
-  COSMOS_DB_CONTAINER_NAME: "irisapp-cosmos-container"
+  STORAGE_ACCOUNT_NAME: "irisappstoragegs"
+  STORAGE_CONTAINER_NAME: "irisapp-containergs"
+  COSMOS_DB_ACCOUNT_NAME: "irisappcosmosdbgs"
   CONTAINER_APP_NAME: "irisapp"
   CONTAINER_APP_ENV_NAME: "irisapp-env"
   REGISTRY_SERVER: "docker.io"
@@ -47,22 +46,31 @@ jobs:
 
       - name: Create Storage Account
         run: |
-          az storage account create \
-            --name ${{ env.STORAGE_ACCOUNT_NAME }} \
-            --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
-            --location ${{ env.LOCATION }} \
-            --sku Standard_LRS
-      
-      - name: Create Storage Container
-        run: |
-          az storage container create \
-            --name ${{ env.STORAGE_CONTAINER_NAME }} \
-            --account-name ${{ env.STORAGE_ACCOUNT_NAME }} \
+          # Check if the storage account already exists
+          existing_storage=$(az storage account list --resource-group ${{ env.RESOURCE_GROUP_NAME }} --query "[?name=='${{ env.STORAGE_ACCOUNT_NAME }}'].name" -o tsv)
+          if [ -n "$existing_storage" ]; then
+            echo "Storage account ${{ env.STORAGE_ACCOUNT_NAME }} already exists."
+            az storage account create \
+              --name ${{ env.STORAGE_ACCOUNT_NAME }} \
+              --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
+              --location ${{ env.LOCATION }} \
+              --sku Standard_LRS
+          else
+            echo "Creating storage account: ${{ env.STORAGE_ACCOUNT_NAME }}"
+          fi
+    
       - name: Create Cosmos DB Account 
         run: |
-          az cosmosdb create \
-            --name ${{ env.COSMOS_DB_ACCOUNT_NAME }} \
-            --resource-group ${{ env.RESOURCE_GROUP_NAME }} 
+          # list existing Cosmos DB accounts
+          existing_cosmosdb=$(az cosmosdb list --resource-group ${{ env.RESOURCE_GROUP_NAME }} --query "[?name=='${{ env.COSMOS_DB_ACCOUNT_NAME }}'].name" -o tsv)
+          if [ -z "$existing_cosmosdb" ]; then
+            echo "Creating Cosmos DB account: ${{ env.COSMOS_DB_ACCOUNT_NAME }}"
+            az cosmosdb create \
+              --name ${{ env.COSMOS_DB_ACCOUNT_NAME }} \
+              --resource-group ${{ env.RESOURCE_GROUP_NAME }} 
+          else
+            echo "Cosmos DB account ${{ env.COSMOS_DB_ACCOUNT_NAME }} already exists."
+          fi
 
   create_azure_web_app:
     env:

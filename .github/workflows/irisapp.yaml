@@ -1,3 +1,4 @@
+
 name: Iris App CI/CD
 on:
   push:
@@ -85,8 +86,23 @@ jobs:
 
       - name: Create Service plan
         run: |
-          az appservice plan create --name ${{ env.SERVICE_PLAN_NAME }} --resource-group ${{ env.RESOURCE_GROUP_NAME }} --sku B1 --is-linux
+          # Check if the service plan already exists
+          existing_plan=$(az appservice plan list --resource-group ${{ env.RESOURCE_GROUP_NAME }} --query "[?name=='${{ env.SERVICE_PLAN_NAME }}'].name" -o tsv)
+          if [ -n "$existing_plan" ]; then
+            echo "Service plan ${{ env.SERVICE_PLAN_NAME }} already exists."
+            az appservice plan create --name ${{ env.SERVICE_PLAN_NAME }} --resource-group ${{ env.RESOURCE_GROUP_NAME }} --sku B1 --is-linux
+          else
+            echo "Creating service plan: ${{ env.SERVICE_PLAN_NAME }}"
+          fi
 
       - name: Create Web App
         run: |
-          az webapp create --name ${{ env.CONTAINER_APP_NAME }} --resource-group ${{ env.RESOURCE_GROUP_NAME }} --plan ${{ env.SERVICE_PLAN_NAME }} --deployment-container-image-name ${{ env.IMAGE_NAME }}
+          # Check if the web app already exists
+          existing_webapp=$(az webapp list --resource-group ${{ env.RESOURCE_GROUP_NAME }} --query "[?name=='${{ env.CONTAINER_APP_NAME }}'].name" -o tsv)
+          if [ -n "$existing_webapp" ]; then
+            echo "Web app ${{ env.CONTAINER_APP_NAME }} already exists."
+            az webapp create --name ${{ env.CONTAINER_APP_NAME }} --resource-group ${{ env.RESOURCE_GROUP_NAME }} --plan ${{ env.SERVICE_PLAN_NAME }} --deployment-container-image-name ${{ env.IMAGE_NAME }}
+          else
+            echo "Creating web app: ${{ env.CONTAINER_APP_NAME }}"
+          fi
+          

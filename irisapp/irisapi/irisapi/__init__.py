@@ -49,7 +49,7 @@ async def lifespan(app: FastAPI) -> FastAPI:
     # Clear the storage dictionary
     storage.clear()
     
-app = FastAPI()
+app = FastAPI(lifespan=lifespan)
 
 
 

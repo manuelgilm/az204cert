@@ -106,7 +106,7 @@ jobs:
     env:
       SERVICE_PLAN_NAME: "irisapp-service-plan"
     runs-on: ubuntu-latest
-    needs: create_azure_resources
+    needs: [create_azure_resources, build_and_push_container]
     steps:
       - name: Azure Login
         uses: azure/login@v2

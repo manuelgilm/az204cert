@@ -18,7 +18,7 @@ env:
   REGISTRY_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
   REGISTRY_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
   LOCATION: "brazilsouth"
-  IMAGE_NAME: "tests/simpleapi:latest"
+  IMAGE_NAME: "gilsama/irisapp:latest"
 
 jobs:
   create_azure_resources:
@@ -130,8 +130,13 @@ jobs:
           existing_webapp=$(az webapp list --resource-group ${{ env.RESOURCE_GROUP_NAME }} --query "[?name=='${{ env.CONTAINER_APP_NAME }}'].name" -o tsv)
           if [ -n "$existing_webapp" ]; then
             echo "Web app ${{ env.CONTAINER_APP_NAME }} already exists."
-            az webapp create --name ${{ env.CONTAINER_APP_NAME }} --resource-group ${{ env.RESOURCE_GROUP_NAME }} --plan ${{ env.SERVICE_PLAN_NAME }} --deployment-container-image-name ${{ env.IMAGE_NAME }}
+            az webapp create \
+              --name ${{ env.CONTAINER_APP_NAME }} \
+              --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
+              --plan ${{ env.SERVICE_PLAN_NAME }} \
+              -i ${{ env.IMAGE_NAME }} \
+              -s ${{ secrets.DOCKER_USERNAME }} \
+              -w ${{ secrets.DOCKER_PASSWORD }}
           else
             echo "Creating web app: ${{ env.CONTAINER_APP_NAME }}"
           fi
-          

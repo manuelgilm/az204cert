@@ -14,7 +14,7 @@ env:
   COSMOS_DB_ACCOUNT_NAME: "irisappcosmosdbgs"
   CONTAINER_APP_NAME: "irisappgs"
   CONTAINER_APP_ENV_NAME: "irisapp-env"
-  REGISTRY_SERVER: "docker.io"
+  REGISTRY_SERVER: "https://docker.io"
   REGISTRY_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
   REGISTRY_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
   LOCATION: "brazilsouth"
@@ -136,7 +136,8 @@ jobs:
               --name ${{ env.CONTAINER_APP_NAME }} \
               --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
               --plan ${{ env.SERVICE_PLAN_NAME }} \
-              -i ${{ env.IMAGE_NAME }} \
-              -s ${{ secrets.DOCKER_USERNAME }} \
-              -w ${{ secrets.DOCKER_PASSWORD }}
+              --container-image-name ${{ env.IMAGE_NAME }} \
+              --container-registry-user ${{ secrets.DOCKER_USERNAME }} \
+              --container-registry-password ${{ secrets.DOCKER_PASSWORD }}
+              --container-registry-url ${{ env.REGISTRY_SERVER }}
           fi

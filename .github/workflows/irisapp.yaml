@@ -12,7 +12,7 @@ env:
   STORAGE_ACCOUNT_NAME: "irisappstoragegs"
   STORAGE_CONTAINER_NAME: "irisapp-containergs"
   COSMOS_DB_ACCOUNT_NAME: "irisappcosmosdbgs"
-  CONTAINER_APP_NAME: "irisapp"
+  CONTAINER_APP_NAME: "irisappgs"
   CONTAINER_APP_ENV_NAME: "irisapp-env"
   REGISTRY_SERVER: "docker.io"
   REGISTRY_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}

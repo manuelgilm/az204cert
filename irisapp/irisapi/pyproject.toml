@@ -9,6 +9,7 @@ readme = "README.md"
 python = "^3.11"
 fastapi = {extras = ["standard"], version = "^0.116.1"}
 scikit-learn = "^1.7.0"
+azure-cosmos = "^4.9.0"
 
 
 [build-system]

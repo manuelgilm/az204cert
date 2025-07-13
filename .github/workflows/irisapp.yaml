@@ -51,13 +51,13 @@ jobs:
           existing_storage=$(az storage account list --resource-group ${{ env.RESOURCE_GROUP_NAME }} --query "[?name=='${{ env.STORAGE_ACCOUNT_NAME }}'].name" -o tsv)
           if [ -n "$existing_storage" ]; then
             echo "Storage account ${{ env.STORAGE_ACCOUNT_NAME }} already exists."
+          else
+            echo "Creating storage account: ${{ env.STORAGE_ACCOUNT_NAME }}"
             az storage account create \
               --name ${{ env.STORAGE_ACCOUNT_NAME }} \
               --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
               --location ${{ env.LOCATION }} \
               --sku Standard_LRS
-          else
-            echo "Creating storage account: ${{ env.STORAGE_ACCOUNT_NAME }}"
           fi
     
       - name: Create Cosmos DB Account 

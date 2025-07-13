@@ -119,9 +119,9 @@ jobs:
           existing_plan=$(az appservice plan list --resource-group ${{ env.RESOURCE_GROUP_NAME }} --query "[?name=='${{ env.SERVICE_PLAN_NAME }}'].name" -o tsv)
           if [ -n "$existing_plan" ]; then
             echo "Service plan ${{ env.SERVICE_PLAN_NAME }} already exists."
-            az appservice plan create --name ${{ env.SERVICE_PLAN_NAME }} --resource-group ${{ env.RESOURCE_GROUP_NAME }} --sku B1 --is-linux
           else
             echo "Creating service plan: ${{ env.SERVICE_PLAN_NAME }}"
+            az appservice plan create --name ${{ env.SERVICE_PLAN_NAME }} --resource-group ${{ env.RESOURCE_GROUP_NAME }} --sku B1 --is-linux
           fi
 
       - name: Create Web App
@@ -130,6 +130,8 @@ jobs:
           existing_webapp=$(az webapp list --resource-group ${{ env.RESOURCE_GROUP_NAME }} --query "[?name=='${{ env.CONTAINER_APP_NAME }}'].name" -o tsv)
           if [ -n "$existing_webapp" ]; then
             echo "Web app ${{ env.CONTAINER_APP_NAME }} already exists."
+          else
+            echo "Creating web app: ${{ env.CONTAINER_APP_NAME }}"
             az webapp create \
               --name ${{ env.CONTAINER_APP_NAME }} \
               --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
@@ -137,6 +139,4 @@ jobs:
               -i ${{ env.IMAGE_NAME }} \
               -s ${{ secrets.DOCKER_USERNAME }} \
               -w ${{ secrets.DOCKER_PASSWORD }}
-          else
-            echo "Creating web app: ${{ env.CONTAINER_APP_NAME }}"
           fi

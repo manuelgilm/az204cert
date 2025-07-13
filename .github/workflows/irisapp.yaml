@@ -8,6 +8,10 @@ on:
   workflow_dispatch:
 env:
   RESOURCE_GROUP_NAME: "irisapp-rg"
+  STORAGE_ACCOUNT_NAME: "irisappstorage"
+  STORAGE_CONTAINER_NAME: "irisapp-container"
+  COSMOS_DB_ACCOUNT_NAME: "irisappcosmosdb"
+  COSMOS_DB_CONTAINER_NAME: "irisapp-cosmos-container"
   CONTAINER_APP_NAME: "irisapp"
   CONTAINER_APP_ENV_NAME: "irisapp-env"
   REGISTRY_SERVER: "docker.io"
@@ -31,7 +35,35 @@ jobs:
       - name: Create Resource Group
         run: |
           az group create --name ${{ env.RESOURCE_GROUP_NAME }} --location ${{ env.LOCATION }}
+
+  create_storage_solutions:
+    runs-on: ubuntu-latest
+    needs: create_azure_resources
+    steps:
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Create Storage Account
+        run: |
+          az storage account create \
+            --name ${{ env.STORAGE_ACCOUNT_NAME }} \
+            --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
+            --location ${{ env.LOCATION }} \
+            --sku Standard_LRS
       
+      - name: Create Storage Container
+        run: |
+          az storage container create \
+            --name ${{ env.STORAGE_CONTAINER_NAME }} \
+            --account-name ${{ env.STORAGE_ACCOUNT_NAME }} \
+      - name: Create Cosmos DB Account 
+        run: |
+          az cosmosdb create \
+            --name ${{ env.COSMOS_DB_ACCOUNT_NAME }} \
+            --resource-group ${{ env.RESOURCE_GROUP_NAME }} 
+
   create_azure_web_app:
     env:
       SERVICE_PLAN_NAME: "irisapp-service-plan"
@@ -46,3 +78,7 @@ jobs:
       - name: Create Service plan
         run: |
           az appservice plan create --name ${{ env.SERVICE_PLAN_NAME }} --resource-group ${{ env.RESOURCE_GROUP_NAME }} --sku B1 --is-linux
+
+      - name: Create Web App
+        run: |
+          az webapp create --name ${{ env.CONTAINER_APP_NAME }} --resource-group ${{ env.RESOURCE_GROUP_NAME }} --plan ${{ env.SERVICE_PLAN_NAME }} --deployment-container-image-name ${{ env.IMAGE_NAME }}

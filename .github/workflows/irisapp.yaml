@@ -138,6 +138,6 @@ jobs:
               --plan ${{ env.SERVICE_PLAN_NAME }} \
               --container-image-name ${{ env.IMAGE_NAME }} \
               --container-registry-user ${{ secrets.DOCKER_USERNAME }} \
-              --container-registry-password ${{ secrets.DOCKER_PASSWORD }}
+              --container-registry-password ${{ secrets.DOCKER_PASSWORD }} \
               --container-registry-url ${{ env.REGISTRY_SERVER }}
           fi

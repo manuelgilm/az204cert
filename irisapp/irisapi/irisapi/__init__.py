@@ -5,7 +5,8 @@ from contextlib import asynccontextmanager
 import os 
 from azure.cosmos import CosmosClient 
 from azure.cosmos import PartitionKey 
-import uuid
+import random
+
 version="0.1.0"
 description="Iris API for Cosmos DB"
 storage = {}
@@ -34,7 +35,7 @@ async def lifespan(app: FastAPI) -> FastAPI:
 
     create_container = "irisapppredictions"
     try:
-        container = database.create_container(id=create_container, partition_key=PartitionKey(path="/prediction_id"))
+        container = database.create_container(id=create_container, partition_key=PartitionKey(path="/prediction"))
     except Exception as e:
         print(f"Container '{create_container}' already exists. Using existing container.")
         container = database.get_container_client(create_container)
@@ -42,10 +43,6 @@ async def lifespan(app: FastAPI) -> FastAPI:
     storage['database'] = database
     storage['container'] = container
     yield
-    # Cleanup code can be added here if needed
-    # For example, close the Cosmos DB client connection
-    if 'client' in storage:
-        storage['client'].close()
     # Clear the storage dictionary
     storage.clear()
     
@@ -68,11 +65,15 @@ async def predict(data: dict)-> JSONResponse:
     # Store the prediction in Cosmos DB
     container = storage['container']
     prediction = {
-        "prediction_id": str(uuid.uuid4()),
+        "id": str(random.randint(0,1000)),
         "confidence": prediction["confidence"],
         "prediction": prediction["prediction"]
     }
-    container.upsert_item(prediction)
+    try:
+        container.upsert_item(prediction)
+    except Exception as e:
+        print(f"Error inserting item into Cosmos DB: {e}")
+        return JSONResponse(content={"error": "Failed to insert prediction into Cosmos DB"})
     # Return the prediction as a JSON response
     return JSONResponse(content=prediction)
 

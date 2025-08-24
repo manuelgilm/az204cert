@@ -18,7 +18,31 @@ az appservice plan create --name SimpleApiPlan --resource-group SimpleApiRG --sk
 ```bash
 az webapp create --name simpleapigs --resource-group SimpleApiRG --plan SimpleApiPlan --basic-auth Enabled --runtime "Python:3.12" 
 ```
+## Configuring Repository
+* Choose GitHub 
 
+* Github Configurations:
+    * Choose the right organization (where you have the repository)
+    * Choose the right repository (where you have the code)
+    * Choose the branch. (where you have the code)
+    * Workflow option: 
+        * Overwrite the workflow (only if a workflow was created before)
+        * Use existing workflow. 
+
+    ![alt text](image-3.png)
+
+* Authentication Settings
+   * Authentication type:
+        * User-asssigned identity
+        * Basic Authentication (Using this one)
+        ![alt text](image-4.png)
+    * Click on **save**
+
+
+
+* In **Deployment->Deployment Center**
+
+## Configuring the Actions to use poetry.
 ## Configuring the setup command
 Ensure that the **Setup Command** field is configured accurately. An incorrect setup command may prevent the application from starting as expected.
 ![alt text](image.png)
@@ -32,5 +56,6 @@ poetry run fastapi dev simpleapi --port 8000 --host 0.0.0.0
 ```
 
 **Results**
+
 In the browser we can see the following:
 ![alt text](image-1.png)

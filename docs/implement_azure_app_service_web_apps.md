@@ -62,3 +62,33 @@ Since all apps in a service plan run on the same VMs sometimes it is necessary t
 * The app is resource-intensive.
 * You want to scale the app independently from the other apps in the existing plan.
 * The app needs resource in a different geographical region.
+
+**Automated deployment**
+
+Azure supports automated deployment directly from several sources. 
+
+* **Azure DevOps Services**: You can push your code to Azure DevOps Services, build your code in the cloud, run the tests, generate a release from the code, and finally, push your code to an Azure Web APP.
+
+* **GitHub**: Azure supports automated deployment directly from GitHub. 
+* **BitBucket**: Similar to GitHub
+
+**Manual Deployment**
+
+* **Git**:  App Service web apps feature a Git URL that you can add as a remote repository. Pushing to the remote repository deploys your app.
+
+* CLI: `webapp up` is a feature of the `az` command-line interface that packages your app and deploys it. `az webapp up` can create a new App Service web app.
+
+* **Zip deploy**: Use curl or a similar HTTP utility to send a ZIP of your application files to App Service.
+* **FTP/S**: FTP or FTPS is a traditional way of pushing your code to many hosting environments, including App Service.
+
+**Continuously deploy code**
+
+If your project designates branches for testing, QA, and staging, then each of those branches should be continuously deployed to a staging slot. This allows your stakeholders to easily assess and test the deployed branch.
+
+**Continuously deploy containers**
+
+* Build and tag the image: As part of the build pipeline, tag the image with the git commit ID, timestamp, or other identifiable information. It’s best not to use the default "latest" tag. Otherwise, it’s difficult to trace back what code is currently deployed, which makes debugging far more difficult.
+
+* Push the tagged image: Once the image is built and tagged, the pipeline pushes the image to our container registry. In the next step, the deployment slot will pull the tagged image from the container registry.
+
+* Update the deployment slot with the new image tag: When this property is updated, the site automatically restarts and pulls the new container image.

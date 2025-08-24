@@ -2,9 +2,10 @@
 
 ## Creating pipeline to build and publish the image to DockerHub
 
-To create the image we are using the Workflow defined in `.github\workflows\master_container_simple_api.yml` which uses the action `docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671` to build and push the actions
+To create the image we are using the Workflow defined in `.github\workflows\master_container_simple_api.yml` which uses the action `docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671` to build and push the image.
 
 ## Creating resources. 
+
 The `create_resources.sh` script automates the creation of the resource group, service plan, and web app. There are some settings that the command does not update.
 
 **Creating a resource group**
@@ -21,7 +22,13 @@ az appservice plan create --name SimpleApiPlan --resource-group SimpleApiRG --sk
 **Creating the webapp**
 
 ```bash
-az webapp create --name simpleapicontainer --resource-group SimpleApiRG --plan SimpleApiPlan -i <repository/image-name> -s <username> -w <password> 
+az webapp create \
+    --name simpleapicontainer \
+    --resource-group SimpleApiRG \
+    --plan SimpleApiPlan \
+    --container-image-name <repository/image-name:tag> \
+    --container-registry-user <username> \
+    --container-registry-password <password>
 ```
 
 ![alt text](image.png)

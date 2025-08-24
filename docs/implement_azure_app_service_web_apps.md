@@ -97,11 +97,11 @@ If your project designates branches for testing, QA, and staging, then each of t
 
 ## Examples
 
-**Deploy simple api**
+* **Deploy simple api**
 
 In this example a simple API developed with FastAPI is deployed. Click [here](/examples/deploy_simple_api/) for more details.
 
-**Deploy simple api with container**
+* **Deploy simple api with container**
 
 In this example a simple API is developed with FastAPI, then a docker image is built and pushed to dockerhub. The webapp is created to deploy this app container. For more details click [here](/examples/deploy_container_api/)
 

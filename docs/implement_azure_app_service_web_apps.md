@@ -94,3 +94,9 @@ If your project designates branches for testing, QA, and staging, then each of t
 * Push the tagged image: Once the image is built and tagged, the pipeline pushes the image to our container registry. In the next step, the deployment slot will pull the tagged image from the container registry.
 
 * Update the deployment slot with the new image tag: When this property is updated, the site automatically restarts and pulls the new container image.
+
+## Examples
+
+**Deploy simple api**
+
+In this example a simple API developed with FastAPI is deployed. Click [here](/examples/deploy_simple_api/) for more details

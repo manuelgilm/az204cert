@@ -63,6 +63,8 @@ Since all apps in a service plan run on the same VMs sometimes it is necessary t
 * You want to scale the app independently from the other apps in the existing plan.
 * The app needs resource in a different geographical region.
 
+## Deploy to APP Service 
+
 **Automated deployment**
 
 Azure supports automated deployment directly from several sources. 

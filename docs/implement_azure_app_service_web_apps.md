@@ -103,7 +103,5 @@ In this example a simple API developed with FastAPI is deployed. Click [here](/e
 
 **Deploy simple api with container**
 
-In this example a simple API is developed with FastAPI, then a docker image is built and pushed to dockerhub. The webapp is created to deploy this app container. For more details click [here](/examples/deploy_container_api/README.md)
-
-![alt text](image-4.png)
+In this example a simple API is developed with FastAPI, then a docker image is built and pushed to dockerhub. The webapp is created to deploy this app container. For more details click [here](/examples/deploy_container_api/)
 

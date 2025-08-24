@@ -43,6 +43,12 @@ az webapp create --name simpleapigs --resource-group SimpleApiRG --plan SimpleAp
 * In **Deployment->Deployment Center**
 
 ## Configuring the Actions to use poetry.
+
+![alt text](image-5.png)
+
+Comment that tasks that are not needed because we are using poetry in the setup command. Commit and push this will run the workflow.
+
+
 ## Configuring the setup command
 Ensure that the **Setup Command** field is configured accurately. An incorrect setup command may prevent the application from starting as expected.
 ![alt text](image.png)
@@ -56,6 +62,8 @@ poetry run fastapi dev simpleapi --port 8000 --host 0.0.0.0
 ```
 
 **Results**
+
+In **Overview -> Properties -> Domains -> Default Domain** Click the link created by azure, this will be the url of the API. Add `/docs` to access fastAPI docs. For instance `https://simpleapigs.azurewebsites.net/docs`
 
 In the browser we can see the following:
 ![alt text](image-1.png)

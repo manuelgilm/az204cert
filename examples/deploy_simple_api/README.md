@@ -52,6 +52,7 @@ Comment that tasks that are not needed because we are using poetry in the setup 
 ## Configuring the setup command
 
 Ensure that the **Setup Command** field is configured accurately. An incorrect setup command may prevent the application from starting as expected.
+
 ![alt text](image.png)
 
 The command is: 

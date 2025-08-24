@@ -19,6 +19,7 @@ az appservice plan create --name SimpleApiPlan --resource-group SimpleApiRG --sk
 az webapp create --name simpleapigs --resource-group SimpleApiRG --plan SimpleApiPlan --basic-auth Enabled --runtime "Python:3.12" 
 ```
 ## Configuring Repository
+
 * Choose GitHub 
 
 * Github Configurations:
@@ -35,12 +36,11 @@ az webapp create --name simpleapigs --resource-group SimpleApiRG --plan SimpleAp
    * Authentication type:
         * User-asssigned identity
         * Basic Authentication (Using this one)
+
         ![alt text](image-4.png)
+
     * Click on **save**
 
-
-
-* In **Deployment->Deployment Center**
 
 ## Configuring the Actions to use poetry.
 
@@ -50,6 +50,7 @@ Comment that tasks that are not needed because we are using poetry in the setup 
 
 
 ## Configuring the setup command
+
 Ensure that the **Setup Command** field is configured accurately. An incorrect setup command may prevent the application from starting as expected.
 ![alt text](image.png)
 

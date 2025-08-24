@@ -1,5 +1,9 @@
 # Deploy Simple Container API Example
 
+## Creating pipeline to build and publish the image to DockerHub
+
+To create the image we are using the Workflow defined in `.github\workflows\master_container_simple_api.yml` which uses the action `docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671` to build and push the actions
+
 ## Creating resources. 
 The `create_resources.sh` script automates the creation of the resource group, service plan, and web app. There are some settings that the command does not update.
 

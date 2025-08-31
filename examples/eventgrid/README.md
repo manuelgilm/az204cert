@@ -17,6 +17,14 @@ az group create --name $rg_name --location $location
 az storage account create --name $storage_account_name --resource-group $rg_name --location $location --sku Standard_LRS
 ```
 
+* **Creating a container**
+
+This is the container that we will use to upload blobs and trigger the function.
+
+```bash
+az storage container create --name $storage_container_name --account-name $storage_account_name
+```
+
 * **Creating a service plan** This is needed for the function app.
 
 ```bash

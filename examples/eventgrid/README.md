@@ -57,3 +57,33 @@ The previous command will create the necessary files to create the function app.
 ```bash
 func azure functionapp publish $function_app_name
 ```
+## Event Configuration (Using the UI)
+
+The next configuration shows how to configure the event grid to trigger the az function given a blob event.
+
+![alt text](image.png)
+
+Go to the storage account page and go to **Events**:
+
+![alt text](image-1.png)
+
+On the events page, click **+ Event Subscription** To create new subscription
+
+![alt text](image-2.png)
+
+By default the event types are **Blob Created** and **Blob Deleted**. That's what we need!
+
+**Endpoint Details**
+Here we are going to configure the event subscription to trigger the Azure function, or the "Handler" which will do something based on the event.
+
+![alt text](image-3.png)
+
+Let's use Endpoint Type Azure Function. Now there is an option to configure an endpoint, click there. If everything went well during the execution of the script, the configuration will be automatically populated with information about the function that we create before.
+
+![alt text](image-4.png)
+
+Confirm the selection and click on create! After a few minutes you can upload some files to your container, this will triggered the azure function.
+
+
+
+

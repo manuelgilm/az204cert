@@ -2,6 +2,7 @@ topic_name=eventgridgstopic
 rg_name=eventgridgs
 location=brazilsouth
 storage_account_name=eventgridgsstorage
+storage_container_name=testcontainer
 function_app_name=eventgridgsfunctionapp
 service_plan_name=eventgridgsserviceplan
 
@@ -11,10 +12,11 @@ az group create --name $rg_name --location $location
 # create a storage account
 az storage account create --name $storage_account_name --resource-group $rg_name --location $location --sku Standard_LRS
 
+# create a container within the storage account
+az storage container create --name $storage_container_name --account-name $storage_account_name
+
 # create service plan
 az appservice plan create --name $service_plan_name --resource-group $rg_name --sku S1 --is-linux
-
-# create a function app
 
 # create function app
 az functionapp create \
@@ -35,3 +37,5 @@ func new \
 
 # publish local function
 func azure functionapp publish $function_app_name
+
+

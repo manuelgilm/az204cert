@@ -38,4 +38,3 @@ func new \
 # publish local function
 func azure functionapp publish $function_app_name
 
-

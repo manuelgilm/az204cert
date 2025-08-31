@@ -33,3 +33,11 @@ From an Event Grid perspective, an event handler is the place where the event is
 ## Discover Event Schemas
 
 Azure Event Grid supports two types of event schemas: Event Grid event schema and Cloud event schema. Events consist of a set of four required string properties. The properties are common to all events from any publisher.
+
+## Examples 
+
+* **Triggering simple azure function app using blob event.**
+
+In this example an Azure function is triggered based on a blob event. For more details, click [here](/examples/eventgrid/README.md)
+
+

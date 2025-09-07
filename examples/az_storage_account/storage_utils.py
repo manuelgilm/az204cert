@@ -126,17 +126,19 @@ def create_blob_container(
     print(f"Blob Container '{container_name}' created.")
     return container
 
-def main():
-    GROUP_NAME = "storageaccountgs"
-    STORAGE_ACCOUNT_NAME = (
-        "mystorageaccountgs12345"  # Storage account names must be globally unique
-    )
-    CONTAINER_NAME = "mycontainer"
-    LOCATION = "brazilsouth"
-    # Example usage
-    load_dotenv()
-    resource_client = get_resource_client()
-    storage_client = get_storage_client()
+def clean(resource_client: ResourceManagementClient, group_name: str):
+    """
+    Delete the specified resource group and all its resources.
+
+    :param resource_client: An instance of ResourceManagementClient.
+    :param group_name: Name of the resource group to delete.
+    """
+    print(f"Deleting Resource Group: {group_name}")
+    delete_async_operation = resource_client.resource_groups.begin_delete(group_name)
+    delete_async_operation.wait()
+    print(f"Resource Group '{group_name}' deleted.")
+
+def main(resource_client: Optional[ResourceManagementClient] = None, storage_client: Optional[StorageManagementClient] = None):
 
     # creating resource group
     create_resource_group(GROUP_NAME, LOCATION, resource_client)
@@ -149,4 +151,20 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    import sys
+    load_dotenv()
+    GROUP_NAME = "storageaccountgs"
+    STORAGE_ACCOUNT_NAME = "mystorageaccountgs12345"
+    CONTAINER_NAME = "mycontainer"
+    LOCATION = "brazilsouth"
+
+    resource_client = get_resource_client()
+    storage_client = get_storage_client()
+    
+    args = sys.argv[1:]
+    if args and args[0] == "run":
+        main(resource_client, storage_client)
+    elif args and args[0] == "clean":
+        clean(resource_client, GROUP_NAME)
+    else:
+        print("Pass 'run' as an argument to execute the main function.")

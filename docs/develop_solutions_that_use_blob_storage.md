@@ -40,3 +40,33 @@ An Azure Storage account is the top-level container for all Azure Storage servic
         * Block blobs
         * Page blobs
         * file shares
+
+### Azure Blob Storage Resource types.
+
+Blob storage offers three types of resources:
+
+* The storage account
+* A container in the storage account
+* A blob in a container.
+
+![alt text](image-4.png)
+
+### Azure Storage Security Features.
+
+Blob storage offers and recommends to use service-side encryption (sse), however, encryption is also available for Azure Storage libraries from the client.
+
+* Which of the following types of blobs are used to store virtual hard drive files?
+
+    * Page blobs
+
+* Which of the following types of storage accounts is recommended for most scenarios using Azure Storage?
+
+    * General-purpose v2
+
+* What is the maximum size of data that a block blob in Azure Blob storage can store?
+
+    * 190.7 TB
+
+* What are the two versions of client-side encryption available in the Azure Blob Storage and Queue Storage client libraries?
+
+    * Version 1 uses Cipher Block Chaining (CBC) mode with AES and Version 2 uses Galois/Counter Model (GCM) mode with AES

@@ -70,3 +70,5 @@ Blob storage offers and recommends to use service-side encryption (sse), however
 * What are the two versions of client-side encryption available in the Azure Blob Storage and Queue Storage client libraries?
 
     * Version 1 uses Cipher Block Chaining (CBC) mode with AES and Version 2 uses Galois/Counter Model (GCM) mode with AES
+
+## Manage the Azure Blob Storage Lifecycle

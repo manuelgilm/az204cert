@@ -17,4 +17,4 @@ az storage blob upload --account-name $storage_account_name --container-name $co
 
 # Using Python SDK
 
-Examples of how to use the SDK can be found ![here](https://github.com/Azure-Samples/azure-samples-python-management/tree/main/samples/storage)
+Examples of how to use the SDK can be found [here](https://github.com/Azure-Samples/azure-samples-python-management/tree/main/samples/storage)

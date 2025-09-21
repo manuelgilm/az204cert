@@ -1,0 +1,33 @@
+
+name: MLflow Server Deploy
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'mlflow_server/trigger.txt'
+  workflow_dispatch:
+env:
+  RESOURCE_GROUP_NAME: "mlflow_server_rg"
+  STORAGE_ACCOUNT_NAME: "mlflow_servertoragegs"
+  STORAGE_CONTAINER_NAME: "mlflow_servercontainergs"
+  COSMOS_DB_ACCOUNT_NAME: "mlflow_serverosmosdbgs"
+  CONTAINER_APP_NAME: "mlflow_servers"
+  CONTAINER_APP_ENV_NAME: "mlflow_serverenv"
+  REGISTRY_SERVER: "https://docker.io"
+  REGISTRY_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+  REGISTRY_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
+  LOCATION: "brazilsouth"
+  IMAGE_NAME: "gilsama/mlflow_serverlatest"
+
+jobs:
+  create_azure_resources:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}

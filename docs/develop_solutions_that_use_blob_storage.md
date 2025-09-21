@@ -72,3 +72,7 @@ Blob storage offers and recommends to use service-side encryption (sse), however
     * Version 1 uses Cipher Block Chaining (CBC) mode with AES and Version 2 uses Galois/Counter Model (GCM) mode with AES
 
 ## Manage the Azure Blob Storage Lifecycle
+
+## Examples:
+
+* Code used for practice [here](/examples/az_storage_account/)

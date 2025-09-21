@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
 env:
   RESOURCE_GROUP_NAME: "mlflow_server_rg"
-  STORAGE_ACCOUNT_NAME: "mlflow_servertoragegs"
+  STORAGE_ACCOUNT_NAME: "mlflowserverstrggs"
   STORAGE_CONTAINER_NAME: "mlflow_servercontainergs"
   COSMOS_DB_ACCOUNT_NAME: "mlflow_serverosmosdbgs"
   CONTAINER_APP_NAME: "mlflow_servers"

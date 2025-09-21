@@ -39,5 +39,3 @@ Azure Event Grid supports two types of event schemas: Event Grid event schema an
 * **Triggering simple azure function app using blob event.**
 
 In this example an Azure function is triggered based on a blob event. For more details, click [here](/examples/eventgrid/README.md)
-
-

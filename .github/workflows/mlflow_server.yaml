@@ -85,7 +85,8 @@ jobs:
                 --admin-user ${{ secrets.AZ_POSTGRESQL_DB_ADMIN_USERNAME }} \
                 --admin-password ${{ secrets.AZ_POSTGRESQL_DB_ADMIN_PASSWORD }} \
                 --sku-name Standard_B1ms \
-                --version 11
+                --version 11 \
+                --tier Burstable
               
               # Create a database in the PostgreSQL server
               az postgres db create \

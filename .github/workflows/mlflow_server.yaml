@@ -15,7 +15,7 @@ env:
   DATABASE_NAME: "mlflowdb"
   COSMOS_DB_ACCOUNT_NAME: "mlflow_serverosmosdbgs"
   CONTAINER_APP_NAME: "mlflow_server"
-  CONTAINER_APP_ENV_NAME: "mlflow_server_env"
+  CONTAINER_APP_ENV_NAME: "mlflowserverenv"
   # REGISTRY_SERVER: "https://docker.io"
   # REGISTRY_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
   # REGISTRY_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}

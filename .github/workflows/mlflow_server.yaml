@@ -78,6 +78,7 @@ jobs:
               echo "Creating PostgreSQL server: ${{ env.AZURE_POSTGRESQL_NAME }}"
               az postgres flexible-server create \
                 --name ${{ env.AZURE_POSTGRESQL_NAME }} \
+                --admin-display-name ${{ secrets.AZ_SP_CLIENT_ID }} \
                 --admin-type ServicePrincipal \
                 --admin-object-id ${{ secrets.AZ_SP_CLIENT_ID }} \
                 --resource-group ${{ env.RESOURCE_GROUP_NAME }} \

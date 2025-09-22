@@ -11,6 +11,8 @@ env:
   RESOURCE_GROUP_NAME: "mlflow_server_rg"
   STORAGE_ACCOUNT_NAME: "mlflowserverstrggs"
   AZURE_CONTAINER_REGISTRY_NAME: "mlflowacrgs"
+  AZURE_POSTGRESQL_NAME: "mlflowserverpsqlgs"
+  DATABASE_NAME: "mlflowdb"
   COSMOS_DB_ACCOUNT_NAME: "mlflow_serverosmosdbgs"
   CONTAINER_APP_NAME: "mlflow_servers"
   CONTAINER_APP_ENV_NAME: "mlflow_serverenv"
@@ -63,7 +65,32 @@ jobs:
                 --location ${{ env.LOCATION }} \
                 --sku Standard_LRS
             fi
-
+      - name: Create a PostgreSQL database
+        uses: azure/cli@v2
+        with:
+          azcliversion: latest
+          inlineScript: |
+            # Check if the PostgreSQL server already exists
+            existing_pg=$(az postgres server list --resource-group ${{ env.RESOURCE_GROUP_NAME }} --query "[?name=='${{ env.AZURE_POSTGRESQL_NAME }}'].name" -o tsv)
+            if [ -n "$existing_pg" ]; then
+              echo "PostgreSQL server ${{ env.AZURE_POSTGRESQL_NAME }} already exists."
+            else
+              echo "Creating PostgreSQL server: ${{ env.AZURE_POSTGRESQL_NAME }}"
+              az postgres server create \
+                --name ${{ env.AZURE_POSTGRESQL_NAME }} \
+                --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
+                --location ${{ env.LOCATION }} \
+                --admin-user myadminuser \
+                --admin-password MyP@ssword1234 \
+                --sku-name B_Gen5_1 \
+                --version 11
+              
+              # Create a database in the PostgreSQL server
+              az postgres db create \
+                --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
+                --server-name ${{ env.AZURE_POSTGRESQL_NAME }} \
+                --name ${{ env.DATABASE_NAME }}
+            fi
       - name: Create Azure Container Registry
         uses: azure/cli@v2
         with:

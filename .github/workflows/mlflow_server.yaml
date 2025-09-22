@@ -216,3 +216,4 @@ jobs:
                 --memory 2Gi \
                 --registry-server ${{ env.AZURE_CONTAINER_REGISTRY_NAME }} \
                 --registry-identity system 
+            fi

@@ -23,121 +23,121 @@ env:
   IMAGE_NAME: "gilsama/mlflow_serverlatest"
 
 jobs:
-  create_azure_resources:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+  # create_azure_resources:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v2
 
-      - name: Azure Login
-        uses: azure/login@v2
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
+  #     - name: Azure Login
+  #       uses: azure/login@v2
+  #       with:
+  #         creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: Create Resource Group
-        uses: azure/cli@v2
-        with:
-          azcliversion: latest
-          inlineScript: |
-            # Check if the resource group already exists
-            existing_rg=$(az group exists --name ${{ env.RESOURCE_GROUP_NAME }})
-            if [ "$existing_rg" = "false" ]; then
-              echo "Creating resource group: ${{ env.RESOURCE_GROUP_NAME }}"
-              az group create --name ${{ env.RESOURCE_GROUP_NAME }} --location ${{ env.LOCATION }}
-            else
-              echo "Resource group ${{ env.RESOURCE_GROUP_NAME }} already exists."
-            fi
+  #     - name: Create Resource Group
+  #       uses: azure/cli@v2
+  #       with:
+  #         azcliversion: latest
+  #         inlineScript: |
+  #           # Check if the resource group already exists
+  #           existing_rg=$(az group exists --name ${{ env.RESOURCE_GROUP_NAME }})
+  #           if [ "$existing_rg" = "false" ]; then
+  #             echo "Creating resource group: ${{ env.RESOURCE_GROUP_NAME }}"
+  #             az group create --name ${{ env.RESOURCE_GROUP_NAME }} --location ${{ env.LOCATION }}
+  #           else
+  #             echo "Resource group ${{ env.RESOURCE_GROUP_NAME }} already exists."
+  #           fi
 
-      - name: Create Storage Account
-        uses: azure/cli@v2
-        with:
-          azcliversion: latest
-          inlineScript: |
-            # Check if the storage account already exists
-            existing_storage=$(az storage account list --resource-group ${{ env.RESOURCE_GROUP_NAME }} --query "[?name=='${{ env.STORAGE_ACCOUNT_NAME }}'].name" -o tsv)
-            if [ -n "$existing_storage" ]; then
-              echo "Storage account ${{ env.STORAGE_ACCOUNT_NAME }} already exists."
-            else
-              echo "Creating storage account: ${{ env.STORAGE_ACCOUNT_NAME }}"
-              az storage account create \
-                --name ${{ env.STORAGE_ACCOUNT_NAME }} \
-                --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
-                --location ${{ env.LOCATION }} \
-                --sku Standard_LRS
-            fi
-      - name: Create a PostgreSQL database
-        uses: azure/cli@v2
-        with:
-          azcliversion: latest
-          inlineScript: |
-            # Check if the PostgreSQL server already exists
-            existing_pg=$(
-            az postgres flexible-server list \
-            --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
-            --query "[?name=='${{ env.AZURE_POSTGRESQL_NAME }}'].name" -o tsv
-            )
-            if [ -n "$existing_pg" ]; then
-              echo "PostgreSQL server ${{ env.AZURE_POSTGRESQL_NAME }} already exists."
-            else
-              echo "Creating PostgreSQL server: ${{ env.AZURE_POSTGRESQL_NAME }}"
-              az postgres flexible-server create \
-                --name ${{ env.AZURE_POSTGRESQL_NAME }} \
-                --admin-display-name ${{ secrets.AZ_SP_CLIENT_ID }} \
-                --admin-type ServicePrincipal \
-                --admin-object-id ${{ secrets.AZ_SP_CLIENT_ID }} \
-                --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
-                --location ${{ env.LOCATION }} \
-                --admin-user ${{ secrets.AZ_POSTGRESQL_DB_ADMIN_USERNAME }} \
-                --admin-password ${{ secrets.AZ_POSTGRESQL_DB_ADMIN_PASSWORD }} \
-                --sku-name Standard_B1ms \
-                --version 14 \
-                --tier Burstable \
-                --microsoft-entra-auth Enabled \
-                --yes
-            fi
-      - name: Create a PostgreSQL database
-        uses: azure/cli@v2
-        with:
-          azcliversion: latest
-          inlineScript: |
-            # Check if the database already exists
-            existing_db=$(
-            az postgres flexible-server db list \
-              --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
-              --server-name ${{ env.AZURE_POSTGRESQL_NAME }} \
-              --query "[?name=='${{ env.DATABASE_NAME }}'].name" -o tsv
-            )
-            if [ -n "$existing_db" ]; then
-              echo "Database ${{ env.DATABASE_NAME }} already exists."
-            else
-              echo "Creating database: ${{ env.DATABASE_NAME }}"
-              az postgres flexible-server db create \
-              --database-name ${{ env.DATABASE_NAME }} \
-              --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
-              --server-name ${{ env.AZURE_POSTGRESQL_NAME }}
-            fi
+  #     - name: Create Storage Account
+  #       uses: azure/cli@v2
+  #       with:
+  #         azcliversion: latest
+  #         inlineScript: |
+  #           # Check if the storage account already exists
+  #           existing_storage=$(az storage account list --resource-group ${{ env.RESOURCE_GROUP_NAME }} --query "[?name=='${{ env.STORAGE_ACCOUNT_NAME }}'].name" -o tsv)
+  #           if [ -n "$existing_storage" ]; then
+  #             echo "Storage account ${{ env.STORAGE_ACCOUNT_NAME }} already exists."
+  #           else
+  #             echo "Creating storage account: ${{ env.STORAGE_ACCOUNT_NAME }}"
+  #             az storage account create \
+  #               --name ${{ env.STORAGE_ACCOUNT_NAME }} \
+  #               --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
+  #               --location ${{ env.LOCATION }} \
+  #               --sku Standard_LRS
+  #           fi
+  #     - name: Create a PostgreSQL database
+  #       uses: azure/cli@v2
+  #       with:
+  #         azcliversion: latest
+  #         inlineScript: |
+  #           # Check if the PostgreSQL server already exists
+  #           existing_pg=$(
+  #           az postgres flexible-server list \
+  #           --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
+  #           --query "[?name=='${{ env.AZURE_POSTGRESQL_NAME }}'].name" -o tsv
+  #           )
+  #           if [ -n "$existing_pg" ]; then
+  #             echo "PostgreSQL server ${{ env.AZURE_POSTGRESQL_NAME }} already exists."
+  #           else
+  #             echo "Creating PostgreSQL server: ${{ env.AZURE_POSTGRESQL_NAME }}"
+  #             az postgres flexible-server create \
+  #               --name ${{ env.AZURE_POSTGRESQL_NAME }} \
+  #               --admin-display-name ${{ secrets.AZ_SP_CLIENT_ID }} \
+  #               --admin-type ServicePrincipal \
+  #               --admin-object-id ${{ secrets.AZ_SP_CLIENT_ID }} \
+  #               --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
+  #               --location ${{ env.LOCATION }} \
+  #               --admin-user ${{ secrets.AZ_POSTGRESQL_DB_ADMIN_USERNAME }} \
+  #               --admin-password ${{ secrets.AZ_POSTGRESQL_DB_ADMIN_PASSWORD }} \
+  #               --sku-name Standard_B1ms \
+  #               --version 14 \
+  #               --tier Burstable \
+  #               --microsoft-entra-auth Enabled \
+  #               --yes
+  #           fi
+  #     - name: Create a PostgreSQL database
+  #       uses: azure/cli@v2
+  #       with:
+  #         azcliversion: latest
+  #         inlineScript: |
+  #           # Check if the database already exists
+  #           existing_db=$(
+  #           az postgres flexible-server db list \
+  #             --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
+  #             --server-name ${{ env.AZURE_POSTGRESQL_NAME }} \
+  #             --query "[?name=='${{ env.DATABASE_NAME }}'].name" -o tsv
+  #           )
+  #           if [ -n "$existing_db" ]; then
+  #             echo "Database ${{ env.DATABASE_NAME }} already exists."
+  #           else
+  #             echo "Creating database: ${{ env.DATABASE_NAME }}"
+  #             az postgres flexible-server db create \
+  #             --database-name ${{ env.DATABASE_NAME }} \
+  #             --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
+  #             --server-name ${{ env.AZURE_POSTGRESQL_NAME }}
+  #           fi
 
-      - name: Create Azure Container Registry
-        uses: azure/cli@v2
-        with:
-          azcliversion: latest
-          inlineScript: |
-            # Check if the ACR already exists
-            existing_acr=$(
-              az acr list \
-              --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
-              --query "[?name=='${{ env.AZURE_CONTAINER_REGISTRY_NAME }}'].name" -o tsv
-            )
-            if [ -n "$existing_acr" ]; then
-              echo "Azure Container Registry ${{ env.AZURE_CONTAINER_REGISTRY_NAME }} already exists."
-            else
-              echo "Creating Azure Container Registry: ${{ env.AZURE_CONTAINER_REGISTRY_NAME }}"
-              az acr create \
-                --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
-                --name ${{ env.AZURE_CONTAINER_REGISTRY_NAME }} \
-                --sku Basic \
-                --admin-enabled true
-            fi
+  #     - name: Create Azure Container Registry
+  #       uses: azure/cli@v2
+  #       with:
+  #         azcliversion: latest
+  #         inlineScript: |
+  #           # Check if the ACR already exists
+  #           existing_acr=$(
+  #             az acr list \
+  #             --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
+  #             --query "[?name=='${{ env.AZURE_CONTAINER_REGISTRY_NAME }}'].name" -o tsv
+  #           )
+  #           if [ -n "$existing_acr" ]; then
+  #             echo "Azure Container Registry ${{ env.AZURE_CONTAINER_REGISTRY_NAME }} already exists."
+  #           else
+  #             echo "Creating Azure Container Registry: ${{ env.AZURE_CONTAINER_REGISTRY_NAME }}"
+  #             az acr create \
+  #               --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
+  #               --name ${{ env.AZURE_CONTAINER_REGISTRY_NAME }} \
+  #               --sku Basic \
+  #               --admin-enabled true
+  #           fi
 
   deploy_mlflow_image:
     runs-on: ubuntu-latest

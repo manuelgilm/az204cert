@@ -71,7 +71,11 @@ jobs:
           azcliversion: latest
           inlineScript: |
             # Check if the PostgreSQL server already exists
-            existing_pg=$(az postgres flexible-server list --resource-group ${{ env.RESOURCE_GROUP_NAME }} --query "[?name=='${{ env.AZURE_POSTGRESQL_NAME }}'].name" -o tsv)
+            existing_pg=$(
+            az postgres flexible-server list \
+            --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
+            --query "[?name=='${{ env.AZURE_POSTGRESQL_NAME }}'].name" -o tsv
+            )
             if [ -n "$existing_pg" ]; then
               echo "PostgreSQL server ${{ env.AZURE_POSTGRESQL_NAME }} already exists."
             else
@@ -97,7 +101,12 @@ jobs:
           azcliversion: latest
           inlineScript: |
             # Check if the database already exists
-            existing_db=$(az postgres flexible-server db list --resource-group ${{ env.RESOURCE_GROUP_NAME }} --server-name ${{ env.AZURE_POSTGRESQL_NAME }} --query "[?name=='${{ env.DATABASE_NAME }}'].name" -o tsv)
+            existing_db=$(
+            az postgres flexible-server db list \
+              --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
+              --server-name ${{ env.AZURE_POSTGRESQL_NAME }} \
+              --query "[?name=='${{ env.DATABASE_NAME }}'].name" -o tsv
+            )
             if [ -n "$existing_db" ]; then
               echo "Database ${{ env.DATABASE_NAME }} already exists."
             else

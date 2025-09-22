@@ -90,13 +90,25 @@ jobs:
                 --tier Burstable \
                 --microsoft-entra-auth Enabled \
                 --yes
-              
-              # Create a database in the PostgreSQL server
-              az postgres db create \
-                --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
-                --server-name ${{ env.AZURE_POSTGRESQL_NAME }} \
-                --name ${{ env.DATABASE_NAME }}
             fi
+      - name: Create a PostgreSQL database
+        uses: azure/cli@v2
+        with:
+          azcliversion: latest
+          inlineScript: |
+            # Check if the database already exists
+            existing_db=$(az postgres flexible-server db list --resource-group ${{ env.RESOURCE_GROUP_NAME }} --server-name ${{ env.AZURE_POSTGRESQL_NAME }} --query "[?name=='${{ env.DATABASE_NAME }}'].name" -o tsv)
+            if [ -n "$existing_db" ]; then
+              echo "Database ${{ env.DATABASE_NAME }} already exists."
+            else
+              echo "Creating database: ${{ env.DATABASE_NAME }}"
+              az postgres flexible-server db create \
+              --name ${{ env.DATABASE_NAME }} \
+              --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
+              --server-name ${{ env.AZURE_POSTGRESQL_NAME }} \
+              --yes
+            fi
+            
       - name: Create Azure Container Registry
         uses: azure/cli@v2
         with:

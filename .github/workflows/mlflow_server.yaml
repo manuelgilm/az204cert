@@ -10,7 +10,7 @@ on:
 env:
   RESOURCE_GROUP_NAME: "mlflow_server_rg"
   STORAGE_ACCOUNT_NAME: "mlflowserverstrggs"
-  STORAGE_CONTAINER_NAME: "mlflow_servercontainergs"
+  AZURE_CONTAINER_REGISTRY_NAME: "mlflowacrgs"
   COSMOS_DB_ACCOUNT_NAME: "mlflow_serverosmosdbgs"
   CONTAINER_APP_NAME: "mlflow_servers"
   CONTAINER_APP_ENV_NAME: "mlflow_serverenv"
@@ -62,5 +62,23 @@ jobs:
                 --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
                 --location ${{ env.LOCATION }} \
                 --sku Standard_LRS
+            fi
+
+      - name: Create Azure Container Registry
+        uses: azure/cli@v2
+        with:
+          azcliversion: latest
+          inlineScript: |
+            # Check if the ACR already exists
+            existing_acr=$(az acr list --resource-group ${{ env.RESOURCE_GROUP_NAME }} --query "[?name=='${{ env.STORAGE_ACCOUNT_NAME }}'].name" -o tsv)
+            if [ -n "$existing_acr" ]; then
+              echo "Azure Container Registry ${{ env.AZURE_CONTAINER_REGISTRY_NAME }} already exists."
+            else
+              echo "Creating Azure Container Registry: ${{ env.AZURE_CONTAINER_REGISTRY_NAME }}"
+              az acr create \
+                --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
+                --name ${{ env.AZURE_CONTAINER_REGISTRY_NAME }} \
+                --sku Basic \
+                --admin-enabled true
             fi
     

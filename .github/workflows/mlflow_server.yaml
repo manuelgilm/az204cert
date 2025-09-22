@@ -123,7 +123,11 @@ jobs:
           azcliversion: latest
           inlineScript: |
             # Check if the ACR already exists
-            existing_acr=$(az acr list --resource-group ${{ env.RESOURCE_GROUP_NAME }} --query "[?name=='${{ env.STORAGE_ACCOUNT_NAME }}'].name" -o tsv)
+            existing_acr=$(
+              az acr list \
+              --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
+              --query "[?name=='${{ env.AZURE_CONTAINER_REGISTRY_NAME }}'].name" -o tsv
+            )
             if [ -n "$existing_acr" ]; then
               echo "Azure Container Registry ${{ env.AZURE_CONTAINER_REGISTRY_NAME }} already exists."
             else

@@ -103,12 +103,12 @@ jobs:
             else
               echo "Creating database: ${{ env.DATABASE_NAME }}"
               az postgres flexible-server db create \
-              --name ${{ env.DATABASE_NAME }} \
+              --database-name ${{ env.DATABASE_NAME }} \
               --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
               --server-name ${{ env.AZURE_POSTGRESQL_NAME }} \
               --yes
             fi
-            
+
       - name: Create Azure Container Registry
         uses: azure/cli@v2
         with:

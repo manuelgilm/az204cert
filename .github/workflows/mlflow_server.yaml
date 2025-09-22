@@ -80,9 +80,9 @@ jobs:
                 --name ${{ env.AZURE_POSTGRESQL_NAME }} \
                 --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
                 --location ${{ env.LOCATION }} \
-                --admin-user myadminuser \
-                --admin-password MyP@ssword1234 \
-                --sku-name B_Gen5_1 \
+                --admin-user ${{ secrets.AZ_POSTGRESQL_DB_ADMIN_USERNAME }} \
+                --admin-password ${{ secrets.AZ_POSTGRESQL_DB_ADMIN_PASSWORD }} \
+                --sku-name B1ms \
                 --version 11
               
               # Create a database in the PostgreSQL server

@@ -192,6 +192,14 @@ jobs:
                 --location ${{ env.LOCATION }}
             fi
 
+      - name: Get Azure Contaner Registry Password
+        id: get_acr_password
+        uses: azure/cli@v2
+        with:
+          azcliversion: latest
+          inlineScript: |
+            echo "::set-output name=acr_password::$(az acr credential show --name ${{ env.AZURE_CONTAINER_REGISTRY_NAME }} --query "passwords[0].value" -o tsv)"
+
       - name: Create Container App
         uses: azure/cli@v2
         with:
@@ -213,5 +221,9 @@ jobs:
                 --environment ${{ env.CONTAINER_APP_ENV_NAME }} \
                 --image ${{ env.AZURE_CONTAINER_REGISTRY_NAME }}/${{ env.IMAGE_NAME }}:${{ github.sha }} \
                 --cpu 1 \
-                --memory 2Gi 
+                --memory 2Gi \
+                --registry-server ${{ env.AZURE_CONTAINER_REGISTRY_NAME }}.azurecr.io \
+                --registry-username ${{ env.AZURE_CONTAINER_REGISTRY_NAME }} \
+                --registry-password ${{ steps.get_acr_password.outputs.acr_password }} \
+
             fi

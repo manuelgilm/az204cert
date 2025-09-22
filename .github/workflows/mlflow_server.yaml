@@ -14,11 +14,11 @@ env:
   AZURE_POSTGRESQL_NAME: "mlflowserverpsqlgs"
   DATABASE_NAME: "mlflowdb"
   COSMOS_DB_ACCOUNT_NAME: "mlflow_serverosmosdbgs"
-  CONTAINER_APP_NAME: "mlflow_servers"
-  CONTAINER_APP_ENV_NAME: "mlflow_serverenv"
-  REGISTRY_SERVER: "https://docker.io"
-  REGISTRY_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-  REGISTRY_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
+  CONTAINER_APP_NAME: "mlflow_server"
+  CONTAINER_APP_ENV_NAME: "mlflow_server_env"
+  # REGISTRY_SERVER: "https://docker.io"
+  # REGISTRY_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+  # REGISTRY_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
   LOCATION: "brazilsouth"
   IMAGE_NAME: "gilsama/mlflow_server"
 
@@ -158,3 +158,63 @@ jobs:
           inlineScript: |
             # az acr login --name ${{ env.AZURE_CONTAINER_REGISTRY_NAME }}
             az acr build --registry ${{ env.AZURE_CONTAINER_REGISTRY_NAME }} --image ${{ env.IMAGE_NAME }}:${{ github.sha }} ./mlflow_server
+  
+  create_azure_web_app:
+    runs-on: ubuntu-latest
+    needs: deploy_mlflow_image
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Create Container App Environment
+        uses: azure/cli@v2
+        with:
+          azcliversion: latest
+          inlineScript: |
+            # Check if the Container App Environment already exists
+            existing_env=$(
+              az containerapp env list \
+              --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
+              --query "[?name=='${{ env.CONTAINER_APP_ENV_NAME }}'].name" -o tsv
+            )
+            if [ -n "$existing_env" ]; then
+              echo "Container App Environment ${{ env.CONTAINER_APP_ENV_NAME }} already exists."
+            else
+              echo "Creating Container App Environment: ${{ env.CONTAINER_APP_ENV_NAME }}"
+              az containerapp env create \
+                --name ${{ env.CONTAINER_APP_ENV_NAME }} \
+                --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
+                --location ${{ env.LOCATION }}
+            fi
+
+      - name: Create Container App
+        uses: azure/cli@v2
+        with:
+          azcliversion: latest
+          inlineScript: |
+            # Check if the Container App already exists
+            existing_app=$(
+              az containerapp list \
+              --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
+              --query "[?name=='${{ env.CONTAINER_APP_NAME }}'].name" -o tsv
+            )
+            if [ -n "$existing_app" ]; then
+              echo "Container App ${{ env.CONTAINER_APP_NAME }} already exists."
+            else
+              echo "Creating Container App: ${{ env.CONTAINER_APP_NAME }}"
+              az containerapp create \
+                --name ${{ env.CONTAINER_APP_NAME }} \
+                --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
+                --environment ${{ env.CONTAINER_APP_ENV_NAME }} \
+                --image ${{ env.REGISTRY_SERVER }}/${{ env.IMAGE_NAME }}:${{ github.sha }} \
+                --cpu 1 \
+                --memory 2Gi \
+                --registry-server ${{ env.AZURE_CONTAINER_REGISTRY_NAME }} \
+                --registry-identity system 
+                # --registry-username ${{ env.REGISTRY_USERNAME }} \
+                # --registry-password ${{ env.REGISTRY_PASSWORD }} \

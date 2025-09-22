@@ -76,13 +76,15 @@ jobs:
               echo "PostgreSQL server ${{ env.AZURE_POSTGRESQL_NAME }} already exists."
             else
               echo "Creating PostgreSQL server: ${{ env.AZURE_POSTGRESQL_NAME }}"
-              az postgres server create \
+              az postgres flexible-server create \
                 --name ${{ env.AZURE_POSTGRESQL_NAME }} \
+                --admin-type ServicePrincipal \
+                --admin-object-id ${{ secrets.AZURE_CLIENT_ID }} \
                 --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
                 --location ${{ env.LOCATION }} \
                 --admin-user ${{ secrets.AZ_POSTGRESQL_DB_ADMIN_USERNAME }} \
                 --admin-password ${{ secrets.AZ_POSTGRESQL_DB_ADMIN_PASSWORD }} \
-                --sku-name B_Gen5_1 \
+                --sku-name Standard_B1ms \
                 --version 11
               
               # Create a database in the PostgreSQL server

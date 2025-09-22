@@ -156,5 +156,5 @@ jobs:
         with:
           azcliversion: latest
           inlineScript: |
-            az acr login --name ${{ env.AZURE_CONTAINER_REGISTRY_NAME }}
+            # az acr login --name ${{ env.AZURE_CONTAINER_REGISTRY_NAME }}
             az acr build --registry ${{ env.AZURE_CONTAINER_REGISTRY_NAME }} --image ${{ env.IMAGE_NAME }} ./mlflow_server

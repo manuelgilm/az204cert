@@ -106,7 +106,6 @@ jobs:
               --database-name ${{ env.DATABASE_NAME }} \
               --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
               --server-name ${{ env.AZURE_POSTGRESQL_NAME }} \
-              --yes
             fi
 
       - name: Create Azure Container Registry

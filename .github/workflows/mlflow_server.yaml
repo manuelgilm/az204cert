@@ -82,7 +82,7 @@ jobs:
                 --location ${{ env.LOCATION }} \
                 --admin-user ${{ secrets.AZ_POSTGRESQL_DB_ADMIN_USERNAME }} \
                 --admin-password ${{ secrets.AZ_POSTGRESQL_DB_ADMIN_PASSWORD }} \
-                --sku-name B1ms \
+                --sku-name B_Gen5_1 \
                 --version 11
               
               # Create a database in the PostgreSQL server

@@ -79,7 +79,7 @@ jobs:
               az postgres flexible-server create \
                 --name ${{ env.AZURE_POSTGRESQL_NAME }} \
                 --admin-type ServicePrincipal \
-                --admin-object-id ${{ secrets.AZURE_CLIENT_ID }} \
+                --admin-object-id ${{ secrets.AZ_SP_CLIENT_ID }} \
                 --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
                 --location ${{ env.LOCATION }} \
                 --admin-user ${{ secrets.AZ_POSTGRESQL_DB_ADMIN_USERNAME }} \

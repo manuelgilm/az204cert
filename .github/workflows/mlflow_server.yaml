@@ -20,7 +20,7 @@ env:
   REGISTRY_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
   REGISTRY_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
   LOCATION: "brazilsouth"
-  IMAGE_NAME: "gilsama/mlflow_serverlatest"
+  IMAGE_NAME: "gilsama/mlflow_server"
 
 jobs:
   # create_azure_resources:
@@ -157,4 +157,4 @@ jobs:
           azcliversion: latest
           inlineScript: |
             # az acr login --name ${{ env.AZURE_CONTAINER_REGISTRY_NAME }}
-            az acr build --registry ${{ env.AZURE_CONTAINER_REGISTRY_NAME }} --image ${{ env.IMAGE_NAME }} ./mlflow_server
+            az acr build --registry ${{ env.AZURE_CONTAINER_REGISTRY_NAME }} --image ${{ env.IMAGE_NAME }}:${{ github.sha }} ./mlflow_server

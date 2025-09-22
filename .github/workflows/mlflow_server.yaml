@@ -105,7 +105,7 @@ jobs:
               az postgres flexible-server db create \
               --database-name ${{ env.DATABASE_NAME }} \
               --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
-              --server-name ${{ env.AZURE_POSTGRESQL_NAME }} \
+              --server-name ${{ env.AZURE_POSTGRESQL_NAME }}
             fi
 
       - name: Create Azure Container Registry

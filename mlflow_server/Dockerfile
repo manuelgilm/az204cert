@@ -6,4 +6,4 @@ RUN apt-get update \
     && pip install azure-storage-blob 
     
 EXPOSE 5000
-CMD ["mlflow", "server"]
+CMD ["mlflow", "server", "--host", "0.0.0.0", "--port", "5000"]

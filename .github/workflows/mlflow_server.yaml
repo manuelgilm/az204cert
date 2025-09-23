@@ -250,5 +250,5 @@ jobs:
                 --memory 2Gi \
                 --registry-server ${{ env.AZURE_CONTAINER_REGISTRY_NAME }}.azurecr.io \
                 --registry-username ${{ env.AZURE_CONTAINER_REGISTRY_NAME }} \
-                --registry-password ${{ steps.get_acr_password.outputs.acr_password }} \
+                --registry-password ${{ steps.get_acr_password.outputs.acr_password }} 
             fi

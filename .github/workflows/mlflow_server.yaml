@@ -218,7 +218,7 @@ jobs:
                 --location ${{ env.LOCATION }}
             fi
 
-      - name: Get Azure Contaner Registry Password
+      - name: Get Azure Container Registry Password
         id: get_acr_password
         uses: azure/cli@v2
         with:
@@ -245,11 +245,10 @@ jobs:
                 --name ${{ env.CONTAINER_APP_NAME }} \
                 --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
                 --environment ${{ env.CONTAINER_APP_ENV_NAME }} \
-                --image ${{ env.AZURE_CONTAINER_REGISTRY_NAME }}/${{ env.IMAGE_NAME }}:${{ github.sha }} \
+                --image ${{ env.AZURE_CONTAINER_REGISTRY_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ github.sha }} \
                 --cpu 1 \
                 --memory 2Gi \
                 --registry-server ${{ env.AZURE_CONTAINER_REGISTRY_NAME }}.azurecr.io \
                 --registry-username ${{ env.AZURE_CONTAINER_REGISTRY_NAME }} \
                 --registry-password ${{ steps.get_acr_password.outputs.acr_password }} \
-
             fi

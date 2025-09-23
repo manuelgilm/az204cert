@@ -106,9 +106,9 @@ jobs:
                 az postgres flexible-server show \
                   --name ${{ env.AZURE_POSTGRESQL_NAME }} \
                   --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
-                  --query "provisioningState" -o tsv
+                  --query "state" -o tsv
                 )
-              if [ "$server_status" = "Succeeded" ]; then
+              if [ "$server_status" = "Ready" ]; then
               echo "PostgreSQL server ${{ env.AZURE_POSTGRESQL_NAME }} is running."
               break
               fi

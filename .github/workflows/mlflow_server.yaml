@@ -120,7 +120,7 @@ jobs:
               sleep $wait_interval
               elapsed=$((elapsed + wait_interval))
             done
-            
+
       - name: Create a PostgreSQL database
         uses: azure/cli@v2
         with:
@@ -167,7 +167,7 @@ jobs:
 
   deploy_mlflow_image:
     runs-on: ubuntu-latest
-    # needs: create_azure_resources
+    needs: create_azure_resources
     steps:
       - name: Checkout code
         uses: actions/checkout@v2

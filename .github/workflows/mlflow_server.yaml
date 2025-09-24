@@ -292,5 +292,5 @@ jobs:
                 --ingress external \
                 --target-port 5000 \
                 --env-vars STORAGE_ACCOUNT_CONNECTION_STRING="${{ needs.create_azure_resources.outputs.STORAGE_ACCOUNT_CONNECTION_STRING }}" \
-                STORAGE_ACCOUNT_KEY="${{ needs.create_azure_resources.outputs.STORAGE_ACCOUNT_KEY }}" \
+                STORAGE_ACCOUNT_KEY="${{ needs.create_azure_resources.outputs.STORAGE_ACCOUNT_KEY }}" 
             fi

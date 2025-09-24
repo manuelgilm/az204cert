@@ -8,7 +8,7 @@ on:
       - 'mlflow_server/trigger.txt'
   workflow_dispatch:
 env:
-  RESOURCE_GROUP_NAME: "mlflowserver_rg"
+  RESOURCE_GROUP_NAME: "mlflowserver2_rg"
   STORAGE_ACCOUNT_NAME: "mlflowserverstrggs"
   BLOB_CONTAINER_NAME: "mlflow-artifacts"
   AZURE_CONTAINER_REGISTRY_NAME: "mlflowacrgs"

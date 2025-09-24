@@ -220,8 +220,6 @@ jobs:
               --secret-build-arg POSTGRESQL_DB_ADMIN_PASSWORD=${{ secrets.AZ_POSTGRESQL_DB_ADMIN_PASSWORD }} \
               --secret-build-arg POSTGRESQL_DB_NAME=${{ env.DATABASE_NAME }} \
               --secret-build-arg POSTGRESQL_SERVER=${{ env.AZURE_POSTGRESQL_NAME }}.postgres.database.azure.com 
-            echo "POSTGRESQL DB NAME: ${{ env.DATABASE_NAME }}"
-            echo "POSTGRESQL SERVER: ${{ env.AZURE_POSTGRESQL_NAME }}.postgres.database.azure.com"
   
   create_azure_web_app:
     runs-on: ubuntu-latest

@@ -82,9 +82,9 @@ jobs:
             if [ -n "$existing_container" ]; then
               echo "Blob container '${{ env.BLOB_CONTAINER_NAME }}' already exists."
             else
-              echo "Creating blob container: ${ env.BLOB_CONTAINER_NAME }"
+              echo "Creating blob container: ${{ env.BLOB_CONTAINER_NAME }}"
               az storage container create \
-                --name ${ env.BLOB_CONTAINER_NAME } \
+                --name ${{ env.BLOB_CONTAINER_NAME }} \
                 --account-name ${{ env.STORAGE_ACCOUNT_NAME }} \
                 --connection-string "${{ steps.get_storage_connection_string.outputs.connection_string }}" \
                 --public-access off

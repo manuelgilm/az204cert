@@ -275,6 +275,14 @@ jobs:
               --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
               --query "[?name=='${{ env.CONTAINER_APP_NAME }}'].name" -o tsv
             )
+            # update secrets 
+            az containerapp secret set \
+              --name ${{ env.CONTAINER_APP_NAME }} \
+              --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
+              --secrets POSTGRESQL_DB_ADMIN_PASSWORD=${{ secrets.AZ_POSTGRESQL_DB_ADMIN_PASSWORD }} \
+              --secrets POSTGRESQL_DB_ADMIN_USERNAME=${{ secrets.AZ_POSTGRESQL_DB_ADMIN_USERNAME }} \
+              --secrets POSTGRESQL_DB_NAME=${{ env.DATABASE_NAME }} 
+              
             if [ -n "$existing_app" ]; then
               echo "Container App ${{ env.CONTAINER_APP_NAME }} already exists."
             else

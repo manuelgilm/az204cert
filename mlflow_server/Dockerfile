@@ -19,4 +19,4 @@ ENV POSTGRESQL_SERVER=${POSTGRESQL_SERVER}
 ENV BACKEND_STORE_URI=postgresql://${POSTGRESQL_DB_ADMIN_USERNAME}:${POSTGRESQL_DB_ADMIN_PASSWORD}@${POSTGRESQL_SERVER}:5432/${POSTGRESQL_DB_NAME}
 
 # It's not recommended to use '&' in CMD array form. Instead, use a shell form to run multiple commands.
-CMD mlflow server --host 0.0.0.0 --port 5000 --backend-store-uri "$BACKEND_STORE_URI" --default-artifact-root wasbs://mlflow-artifacts@mlflowserverstrggs.blob.core.windows.net
+CMD mlflow server --host 0.0.0.0 --port 5000 --backend-store-uri "$BACKEND_STORE_URI" --default-artifact-root wasbs://mlflow-artifacts@mlflowserverstrggs.blob.core.windows.net/mlflow-artifacts

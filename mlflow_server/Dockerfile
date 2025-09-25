@@ -23,4 +23,4 @@ RUN echo "My POSTGRESQL_DB_ADMIN_USERNAME: $POSTGRESQL_DB_ADMIN_USERNAME"
 RUN echo "My POSTGRESQL_DB_NAME: $POSTGRESQL_DB_NAME"
 
 # It's not recommended to use '&' in CMD array form. Instead, use a shell form to run multiple commands.
-CMD mlflow db upgrade "$BACKEND_STORE_URI" && mlflow server --host 0.0.0.0 --port 5000 --backend-store-uri "$BACKEND_STORE_URI"
+CMD mlflow server --host 0.0.0.0 --port 5000 --backend-store-uri "$BACKEND_STORE_URI"

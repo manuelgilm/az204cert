@@ -223,6 +223,9 @@ jobs:
   
   create_azure_web_app:
     runs-on: ubuntu-latest
+    env:
+      AZURE_STORAGE_CONNECTION_STRING: ${{ needs.create_azure_resources.outputs.STORAGE_ACCOUNT_CONNECTION_STRING }}
+      AZURE_STORAGE_ACCESS_KEY: ${{ needs.create_azure_resources.outputs.STORAGE_ACCOUNT_KEY }}
     needs: 
       - deploy_mlflow_image
       - create_azure_resources
@@ -292,6 +295,6 @@ jobs:
                 --registry-password ${{ steps.get_acr_password.outputs.acr_password }} \
                 --ingress external \
                 --target-port 5000 \
-                --env-vars STORAGE_ACCOUNT_CONNECTION_STRING="${{ needs.create_azure_resources.outputs.STORAGE_ACCOUNT_CONNECTION_STRING }}" \
-                STORAGE_ACCOUNT_KEY="${{ needs.create_azure_resources.outputs.STORAGE_ACCOUNT_KEY }}" 
+                --env-vars AZURE_STORAGE_CONNECTION_STRING=$AZURE_STORAGE_CONNECTION_STRING \
+                AZURE_STORAGE_ACCESS_KEY=$AZURE_STORAGE_ACCESS_KEY
             fi

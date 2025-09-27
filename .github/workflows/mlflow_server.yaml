@@ -116,7 +116,6 @@ jobs:
               --sku-name Standard_B1ms \
               --version 14 \
               --tier Burstable \
-              --microsoft-entra-auth Enabled \
               --admin-type User \
               --yes
             fi

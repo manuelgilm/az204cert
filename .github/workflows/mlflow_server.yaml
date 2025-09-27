@@ -8,7 +8,7 @@ on:
       - 'mlflow_server/trigger.txt'
   workflow_dispatch:
 env:
-  RESOURCE_GROUP_NAME: "mlflowserver_rg"
+  RESOURCE_GROUP_NAME: "mlflowserver2_rg"
   STORAGE_ACCOUNT_NAME: "mlflowserverstrggs"
   BLOB_CONTAINER_NAME: "mlflow-artifacts"
   AZURE_CONTAINER_REGISTRY_NAME: "mlflowacrgs"
@@ -109,9 +109,6 @@ jobs:
               echo "Creating PostgreSQL server: ${{ env.AZURE_POSTGRESQL_NAME }}"
               az postgres flexible-server create \
               --name ${{ env.AZURE_POSTGRESQL_NAME }} \
-              --admin-display-name ${{ secrets.AZ_SP_CLIENT_ID }} \
-              --admin-type ServicePrincipal \
-              --admin-object-id ${{ secrets.AZ_SP_CLIENT_ID }} \
               --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
               --location ${{ env.LOCATION }} \
               --admin-user ${{ secrets.AZ_POSTGRESQL_DB_ADMIN_USERNAME }} \
@@ -121,8 +118,6 @@ jobs:
               --tier Burstable \
               --microsoft-entra-auth Enabled \
               --admin-type User \
-              --admin-password ${{ secrets.AZ_POSTGRESQL_DB_ADMIN_PASSWORD }} \
-              --admin-user ${{ secrets.AZ_POSTGRESQL_DB_ADMIN_USERNAME }} \
               --yes
             fi
 
@@ -226,8 +221,8 @@ jobs:
   create_azure_web_app:
     runs-on: ubuntu-latest
     env:
-      AZURE_STORAGE_CONNECTION_STRING: ${{ needs.create_azure_resources.outputs.STORAGE_ACCOUNT_CONNECTION_STRING }}
-      AZURE_STORAGE_ACCESS_KEY: ${{ needs.create_azure_resources.outputs.STORAGE_ACCOUNT_KEY }}
+      AZURE_STORAGE_CONNECTION_STRING: ${{ needs.create_azure_resources.outputs.AZURE_STORAGE_CONNECTION_STRING }}
+      AZURE_STORAGE_ACCESS_KEY: ${{ needs.create_azure_resources.outputs.AZURE_STORAGE_ACCESS_KEY }}
     needs: 
       - deploy_mlflow_image
       - create_azure_resources

@@ -17,6 +17,8 @@ ENV POSTGRESQL_DB_ADMIN_PASSWORD=${POSTGRESQL_DB_ADMIN_PASSWORD}
 ENV POSTGRESQL_DB_NAME=${POSTGRESQL_DB_NAME}
 ENV POSTGRESQL_SERVER=${POSTGRESQL_SERVER}
 ENV BACKEND_STORE_URI=postgresql://${POSTGRESQL_DB_ADMIN_USERNAME}:${POSTGRESQL_DB_ADMIN_PASSWORD}@${POSTGRESQL_SERVER}:5432/${POSTGRESQL_DB_NAME}
+RUN echo "My BACKEND_STORE_URI is $BACKEND_STORE_URI"
+RUN echo "My POSTGRESQL_SERVER is $POSTGRESQL_SERVER"
 
 CMD mlflow server --host 0.0.0.0 --port 5000 --backend-store-uri "$BACKEND_STORE_URI" --default-artifact-root wasbs://mlflow-artifacts@mlflowserverstrggs.blob.core.windows.net/mlflow-artifacts
 # CMD mlflow server --host 0.0.0.0 --port 5000 --default-artifact-root wasbs://mlflow-artifacts@mlflowserverstrggs.blob.core.windows.net/mlflow-artifacts

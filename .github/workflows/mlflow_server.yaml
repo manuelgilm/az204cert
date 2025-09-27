@@ -69,9 +69,11 @@ jobs:
         with:
           azcliversion: latest
           inlineScript: |
-            echo "::set-output name=connection_string::$(az storage account show-connection-string --name ${{ env.STORAGE_ACCOUNT_NAME }} --resource-group ${{ env.RESOURCE_GROUP_NAME }} --query connectionString -o tsv)"
-            echo "::set-output name=account_key::$(az storage account keys list --account-name ${{ env.STORAGE_ACCOUNT_NAME }} --resource-group ${{ env.RESOURCE_GROUP_NAME }} --query '[0].value' -o tsv)"
-      
+            connection_string=$(az storage account show-connection-string --name ${{ env.STORAGE_ACCOUNT_NAME }} --resource-group ${{ env.RESOURCE_GROUP_NAME }} --query connectionString -o tsv)
+            account_key=$(az storage account keys list --account-name ${{ env.STORAGE_ACCOUNT_NAME }} --resource-group ${{ env.RESOURCE_GROUP_NAME }} --query '[0].value' -o tsv)
+            echo "AZURE_STORAGE_CONNECTION_STRING=$connection_string" >> $GITHUB_OUTPUT
+            echo "AZURE_STORAGE_ACCESS_KEY=$account_key" >> $GITHUB_OUTPUT
+
       - name: Create a Blob Container
         uses: azure/cli@v2
         with:
@@ -193,8 +195,8 @@ jobs:
                 --admin-enabled true
             fi
     outputs:
-      STORAGE_ACCOUNT_CONNECTION_STRING: ${{ steps.get_storage_connection_string.outputs.connection_string }}
-      STORAGE_ACCOUNT_KEY: ${{ steps.get_storage_connection_string.outputs.account_key }}
+      AZURE_STORAGE_CONNECTION_STRING: ${{ steps.get_storage_connection_string.outputs.AZURE_STORAGE_CONNECTION_STRING }}
+      AZURE_STORAGE_ACCESS_KEY: ${{ steps.get_storage_connection_string.outputs.AZURE_STORAGE_ACCESS_KEY }}
 
   deploy_mlflow_image:
     runs-on: ubuntu-latest
